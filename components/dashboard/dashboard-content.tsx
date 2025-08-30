@@ -218,7 +218,7 @@ export function DashboardContent({ user, profile, projects, recentAssets }: Dash
               </Card>
 
               <Card className="bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl border border-neutral-200/60 dark:border-neutral-800/60 shadow-sm hover:shadow-md transition-shadow duration-200">
-                <CardHeader className="pb-3">
+                <CardHeader>
                   <CardTitle className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
                     This Month
                   </CardTitle>

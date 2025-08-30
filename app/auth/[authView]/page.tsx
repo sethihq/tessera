@@ -1,27 +1,18 @@
-"use client"
-
-import { useRouter } from "next/navigation"
-import { useEffect } from "react"
+import AuthPageClient from "./AuthPageClient"
 
 export default function AuthPage({
   params,
 }: {
   params: { authView: string }
 }) {
-  const router = useRouter()
+  return <AuthPageClient params={params} />
+}
 
-  useEffect(() => {
-    // Redirect old Better Auth UI routes to new Supabase auth pages
-    switch (params.authView) {
-      case "sign-up":
-        router.replace("/auth/sign-up")
-        break
-      case "sign-in":
-      default:
-        router.replace("/auth/sign-in")
-        break
-    }
-  }, [params.authView, router])
-
-  return null
+export function generateStaticParams() {
+  return [
+    { authView: "sign-in" },
+    { authView: "sign-up" },
+    { authView: "forgot-password" },
+    { authView: "reset-password" },
+  ]
 }

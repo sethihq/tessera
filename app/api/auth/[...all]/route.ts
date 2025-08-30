@@ -1,9 +1,6 @@
-import { NextResponse } from "next/server"
+import { auth } from "@/lib/auth"
+import { toNextJsHandler } from "better-auth/next-js"
 
-export async function GET() {
-  return NextResponse.json({ message: "Auth endpoint not needed with Supabase" }, { status: 404 })
-}
+const handler = toNextJsHandler(auth)
 
-export async function POST() {
-  return NextResponse.json({ message: "Auth endpoint not needed with Supabase" }, { status: 404 })
-}
+export { handler as GET, handler as POST }
