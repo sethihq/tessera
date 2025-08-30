@@ -1,54 +1,22 @@
-import { createServerClient } from "@supabase/ssr"
-import { cookies } from "next/headers"
+import { betterAuth } from "better-auth"
+import { drizzleAdapter } from "better-auth/adapters/drizzle"
+import { db } from "@/lib/db"
+import * as schema from "@/lib/db/schema"
 
-export async function createClient() {
-  const cookieStore = await cookies()
-
-  return createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
-    cookies: {
-      getAll() {
-        return cookieStore.getAll()
-      },
-      setAll(cookiesToSet) {
-        try {
-          cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options))
-        } catch {
-          // The `setAll` method was called from a Server Component.
-          // This can be ignored if you have middleware refreshing
-          // user sessions.
-        }
-      },
+export const auth = betterAuth({
+  database: drizzleAdapter(db, {
+    provider: "pg",
+    schema: {
+      user: schema.user,
+      session: schema.session,
+      account: schema.account,
+      verification: schema.verification,
     },
-  })
-}
-
-export async function getUser() {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  return user
-}
-
-export const auth = {
-  api: {
-    async getSession({ headers }: { headers: Headers }) {
-      const supabase = await createClient()
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-
-      if (!user) {
-        return null
-      }
-
-      return {
-        user: {
-          id: user.id,
-          email: user.email,
-          name: user.user_metadata?.name || user.email,
-        },
-      }
-    },
+  }),
+  emailAndPassword: {
+    enabled: true,
+    requireEmailVerification: false,
   },
-}
+  secret: process.env.BETTER_AUTH_SECRET!,
+  baseURL: process.env.BETTER_AUTH_URL!,
+})
