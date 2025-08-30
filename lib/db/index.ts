@@ -1,6 +1,7 @@
 import { drizzle } from "drizzle-orm/postgres-js"
 import postgres from "postgres"
 import { pgTable, text, timestamp, uuid, jsonb, boolean } from "drizzle-orm/pg-core"
+import { relations } from "drizzle-orm"
 import { createId } from "@paralleldrive/cuid2"
 
 export const user = pgTable("user", {
@@ -95,6 +96,54 @@ export const generatedAssets = pgTable("generated_assets", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 })
 
+export const userRelations = relations(user, ({ many }) => ({
+  sessions: many(session),
+  accounts: many(account),
+  profiles: many(profiles),
+  assetProjects: many(assetProjects),
+  generatedAssets: many(generatedAssets),
+}))
+
+export const sessionRelations = relations(session, ({ one }) => ({
+  user: one(user, {
+    fields: [session.userId],
+    references: [user.id],
+  }),
+}))
+
+export const accountRelations = relations(account, ({ one }) => ({
+  user: one(user, {
+    fields: [account.userId],
+    references: [user.id],
+  }),
+}))
+
+export const profileRelations = relations(profiles, ({ one }) => ({
+  user: one(user, {
+    fields: [profiles.userId],
+    references: [user.id],
+  }),
+}))
+
+export const assetProjectRelations = relations(assetProjects, ({ one, many }) => ({
+  user: one(user, {
+    fields: [assetProjects.userId],
+    references: [user.id],
+  }),
+  generatedAssets: many(generatedAssets),
+}))
+
+export const generatedAssetRelations = relations(generatedAssets, ({ one }) => ({
+  user: one(user, {
+    fields: [generatedAssets.userId],
+    references: [user.id],
+  }),
+  project: one(assetProjects, {
+    fields: [generatedAssets.projectId],
+    references: [assetProjects.id],
+  }),
+}))
+
 const schema = {
   user,
   session,
@@ -103,6 +152,12 @@ const schema = {
   profiles,
   assetProjects,
   generatedAssets,
+  userRelations,
+  sessionRelations,
+  accountRelations,
+  profileRelations,
+  assetProjectRelations,
+  generatedAssetRelations,
 }
 
 const connectionString = process.env.POSTGRES_URL || process.env.POSTGRES_PRISMA_URL || process.env.DATABASE_URL || ""
