@@ -1,17 +1,27 @@
-import { AuthView, authViewPaths } from "@daveyplate/better-auth-ui"
+"use client"
 
-export const dynamicParams = false
-
-export function generateStaticParams() {
-  return authViewPaths.map((path) => ({
-    authView: path,
-  }))
-}
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 
 export default function AuthPage({
   params,
 }: {
   params: { authView: string }
 }) {
-  return <AuthView path={params.authView} />
+  const router = useRouter()
+
+  useEffect(() => {
+    // Redirect old Better Auth UI routes to new Supabase auth pages
+    switch (params.authView) {
+      case "sign-up":
+        router.replace("/auth/sign-up")
+        break
+      case "sign-in":
+      default:
+        router.replace("/auth/sign-in")
+        break
+    }
+  }, [params.authView, router])
+
+  return null
 }
