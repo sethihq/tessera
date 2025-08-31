@@ -1,7 +1,7 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/origin-ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/origin-ui/card"
 import {
   Sidebar,
   SidebarContent,
@@ -16,10 +16,9 @@ import {
   SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar"
-import { HomeIcon, ProjectsIcon, AssetsIcon, GenerateIcon, SettingsIcon, LogoutIcon } from "@/components/ui/icons"
+} from "@/components/origin-ui/sidebar"
+import { HomeIcon, ProjectsIcon, AssetsIcon, GenerateIcon, SettingsIcon, LogoutIcon, PlusIcon } from "@/components/rounded-icons/icons"
 import { signOut } from "@/lib/auth-client"
-import { Plus } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
@@ -177,7 +176,7 @@ export function DashboardContent({ user, profile, projects, recentAssets }: Dash
               className="bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-200 dark:text-neutral-900 text-white shadow-sm h-9 px-4"
             >
               <Link href="/dashboard/generate">
-                <Plus className="w-4 h-4 mr-2" />
+                <PlusIcon className="w-4 h-4 mr-2" />
                 <span className="text-sm font-medium">New Project</span>
               </Link>
             </Button>
@@ -288,7 +287,7 @@ export function DashboardContent({ user, profile, projects, recentAssets }: Dash
                       className="bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-200 dark:text-neutral-900 text-white shadow-sm"
                     >
                       <Link href="/dashboard/generate">
-                        <Plus className="w-4 h-4 mr-2" />
+                        <PlusIcon className="w-4 h-4 mr-2" />
                         Create Project
                       </Link>
                     </Button>

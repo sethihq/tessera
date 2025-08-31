@@ -1,25 +1,24 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
-import { Separator } from "@/components/ui/separator"
+// Luxe UI + Origin UI Components
+import { Button } from "@/components/luxe-ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/origin-ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/origin-ui/tabs"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/origin-ui/select"
+import { Checkbox } from "@/components/origin-ui/checkbox"
+import { Label } from "@/components/origin-ui/label"
+import { Badge } from "@/components/luxe-ui/badge"
+import { Progress } from "@/components/origin-ui/progress"
+import { Separator } from "@/components/origin-ui/separator"
 import {
-  Download,
-  Package,
-  CheckCircle,
-  AlertCircle,
-  Loader2,
-  Infinity as Unity,
-  Gamepad2,
-  Grid3X3,
-} from "lucide-react"
+  DownloadIcon,
+  PackageIcon,
+  CheckCircleIcon,
+  AlertCircleIcon,
+  LoaderIcon,
+  GridIcon,
+} from "@/components/rounded-icons/icons"
 import type { GeneratedAsset } from "@/lib/types"
 
 interface ExportManagerProps {
@@ -41,7 +40,7 @@ export function ExportManager({ selectedAssets, onExportComplete }: ExportManage
     { id: "godot", name: "Godot", icon: Gamepad2, description: "Godot 4.0+ with scenes, resources, and imports" },
     { id: "phaser", name: "Phaser", icon: Gamepad2, description: "Phaser 3.x with atlases and tilemaps" },
     { id: "tiled", name: "Tiled", icon: Grid3X3, description: "Tiled Map Editor with TSX/TMX files" },
-    { id: "generic", name: "Generic", icon: Package, description: "Standard PNG/JSON format" },
+    { id: "generic", name: "Generic", icon: PackageIcon, description: "Standard PNG/JSON format" },
   ]
 
   const exportFormats = [
@@ -328,7 +327,7 @@ export function ExportManager({ selectedAssets, onExportComplete }: ExportManage
               </>
             ) : (
               <div className="text-center py-8">
-                <Package className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+                <PackageIcon className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
                 <h4 className="font-medium text-neutral-900 dark:text-neutral-100 mb-2">No Assets Selected</h4>
                 <p className="text-sm text-neutral-600 dark:text-neutral-400">
                   Select assets from your library to see export preview
@@ -402,10 +401,10 @@ export function ExportManager({ selectedAssets, onExportComplete }: ExportManage
         {exportStatus !== "idle" && (
           <div className="mt-6 space-y-3">
             <div className="flex items-center gap-2">
-              {exportStatus === "preparing" && <Loader2 className="w-4 h-4 animate-spin text-[#FF6600]" />}
-              {exportStatus === "exporting" && <Loader2 className="w-4 h-4 animate-spin text-[#FF6600]" />}
-              {exportStatus === "complete" && <CheckCircle className="w-4 h-4 text-green-500" />}
-              {exportStatus === "error" && <AlertCircle className="w-4 h-4 text-red-500" />}
+              {exportStatus === "preparing" && <LoaderIcon className="w-4 h-4 animate-spin text-[#FF6600]" />}
+              {exportStatus === "exporting" && <LoaderIcon className="w-4 h-4 animate-spin text-[#FF6600]" />}
+              {exportStatus === "complete" && <CheckCircleIcon className="w-4 h-4 text-green-500" />}
+              {exportStatus === "error" && <AlertCircleIcon className="w-4 h-4 text-red-500" />}
 
               <span className="text-sm font-medium">
                 {exportStatus === "preparing" && "Preparing export..."}
@@ -432,7 +431,7 @@ export function ExportManager({ selectedAssets, onExportComplete }: ExportManage
           >
             {isExporting ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                <LoaderIcon className="w-4 h-4 mr-2 animate-spin" />
                 Exporting...
               </>
             ) : (

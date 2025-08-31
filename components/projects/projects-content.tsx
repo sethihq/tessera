@@ -1,8 +1,9 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
+// Luxe UI + Origin UI Components
+import { Button } from "@/components/luxe-ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/origin-ui/card"
+import { Input } from "@/components/origin-ui/input"
 import {
   Sidebar,
   SidebarContent,
@@ -17,9 +18,9 @@ import {
   SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar"
+} from "@/components/luxe-ui/sidebar"
 import { createClient } from "@/lib/supabase/client"
-import { FolderPlus, Home, ImageIcon, LogOut, Plus, Search, Settings, Sparkles, UserIcon, Zap } from "lucide-react"
+import { ProjectsIcon, HomeIconIcon, AssetsIcon, LogoutIcon, PlusIconIcon, SearchIconIcon, SettingsIconIcon, GenerateIcon, UserIcon } from "@/components/rounded-icons/icons"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -32,7 +33,7 @@ interface ProjectsContentProps {
 export function ProjectsContent({ projects }: ProjectsContentProps) {
   const router = useRouter()
   const supabase = createClient()
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchIconQuery] = useState("")
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
@@ -48,23 +49,23 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
   const menuItems = [
     {
       title: "Dashboard",
-      icon: Home,
+      icon: HomeIcon,
       href: "/dashboard",
     },
     {
       title: "Projects",
-      icon: FolderPlus,
+      icon: ProjectsIcon,
       href: "/dashboard/projects",
       isActive: true,
     },
     {
       title: "Assets",
-      icon: ImageIcon,
+      icon: AssetsIcon,
       href: "/dashboard/assets",
     },
     {
       title: "Generate",
-      icon: Sparkles,
+      icon: GenerateIcon,
       href: "/dashboard/generate",
     },
   ]
@@ -76,7 +77,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
           <SidebarHeader className="border-b border-slate-200 dark:border-slate-700 p-6">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <Zap className="w-4 h-4 text-white" />
+                <GenerateIcon className="w-4 h-4 text-white" />
               </div>
               <div>
                 <h2 className="font-semibold text-slate-900 dark:text-slate-100">AI Asset Creator</h2>
@@ -119,8 +120,8 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <Link href="/dashboard/settings" className="flex items-center gap-3">
-                        <Settings className="w-4 h-4" />
-                        <span>Settings</span>
+                        <SettingsIcon className="w-4 h-4" />
+                        <span>SettingsIcon</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -131,7 +132,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
 
           <SidebarFooter className="border-t border-slate-200 dark:border-slate-700 p-4">
             <Button variant="outline" size="sm" onClick={handleSignOut} className="w-full justify-start bg-transparent">
-              <LogOut className="w-4 h-4 mr-2" />
+              <LogoutIcon className="w-4 h-4 mr-2" />
               Sign out
             </Button>
           </SidebarFooter>
@@ -148,21 +149,21 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
               className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
             >
               <Link href="/dashboard/generate">
-                <Plus className="w-4 h-4 mr-2" />
+                <PlusIcon className="w-4 h-4 mr-2" />
                 New Project
               </Link>
             </Button>
           </header>
 
           <main className="flex-1 p-6 space-y-6">
-            {/* Search and Filter */}
+            {/* SearchIcon and Filter */}
             <div className="flex items-center gap-4">
               <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <Input
-                  placeholder="Search projects..."
+                  placeholder="SearchIcon projects..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => setSearchIconQuery(e.target.value)}
                   className="pl-10 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-0 shadow-sm"
                 />
               </div>
@@ -198,14 +199,14 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
             ) : projects.length === 0 ? (
               <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-0 shadow-lg">
                 <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-                  <FolderPlus className="w-16 h-16 text-slate-400 mb-6" />
+                  <ProjectsIcon className="w-16 h-16 text-slate-400 mb-6" />
                   <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">No projects yet</h3>
                   <p className="text-slate-600 dark:text-slate-400 mb-6 max-w-md">
                     Create your first project to start generating amazing game assets with AI.
                   </p>
                   <Button asChild className="bg-gradient-to-r from-blue-500 to-purple-600">
                     <Link href="/dashboard/generate">
-                      <Plus className="w-4 h-4 mr-2" />
+                      <PlusIcon className="w-4 h-4 mr-2" />
                       Create Your First Project
                     </Link>
                   </Button>
@@ -214,14 +215,14 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
             ) : (
               <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-0 shadow-lg">
                 <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-                  <Search className="w-16 h-16 text-slate-400 mb-6" />
+                  <SearchIcon className="w-16 h-16 text-slate-400 mb-6" />
                   <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">No projects found</h3>
                   <p className="text-slate-600 dark:text-slate-400 mb-6">
                     Try adjusting your search terms or create a new project.
                   </p>
                   <Button asChild className="bg-gradient-to-r from-blue-500 to-purple-600">
                     <Link href="/dashboard/generate">
-                      <Plus className="w-4 h-4 mr-2" />
+                      <PlusIcon className="w-4 h-4 mr-2" />
                       Create New Project
                     </Link>
                   </Button>

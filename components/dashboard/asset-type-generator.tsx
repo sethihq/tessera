@@ -1,18 +1,19 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Slider } from "@/components/ui/slider"
-import { Switch } from "@/components/ui/switch"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { Layers, Grid3X3, Package, Zap, Wand2, Eye } from "lucide-react"
+// Luxe UI + Origin UI Components
+import { Button } from "@/components/luxe-ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/origin-ui/card"
+import { Input } from "@/components/origin-ui/input"
+import { Label } from "@/components/origin-ui/label"
+import { Textarea } from "@/components/origin-ui/textarea"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/origin-ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/origin-ui/tabs"
+import { Slider } from "@/components/luxe-ui/slider"
+import { Switch } from "@/components/luxe-ui/switch"
+import { Badge } from "@/components/luxe-ui/badge"
+import { Separator } from "@/components/origin-ui/separator"
+import { LayersIcon, GridIcon, PackageIcon, GenerateIcon, WandIcon, EyeIcon } from "@/components/rounded-icons/icons"
 import type { AssetType, WorldStyle, GenerationParameters } from "@/lib/types"
 import { createClient } from "@/lib/supabase/client"
 
@@ -99,15 +100,15 @@ export function AssetTypeGenerator({
   const getAssetTypeIcon = (name: string) => {
     switch (name) {
       case "parallax":
-        return <Layers className="w-4 h-4" />
+        return <LayersIcon className="w-4 h-4" />
       case "tileset":
-        return <Grid3X3 className="w-4 h-4" />
+        return <GridIcon className="w-4 h-4" />
       case "props":
-        return <Package className="w-4 h-4" />
+        return <PackageIcon className="w-4 h-4" />
       case "fx":
-        return <Zap className="w-4 h-4" />
+        return <GenerateIcon className="w-4 h-4" />
       default:
-        return <Package className="w-4 h-4" />
+        return <PackageIcon className="w-4 h-4" />
     }
   }
 
@@ -154,7 +155,7 @@ export function AssetTypeGenerator({
       <Card className="border-neutral-200 dark:border-neutral-800">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Wand2 className="w-5 h-5 text-[#FF6600]" />
+            <WandIcon className="w-5 h-5 text-[#FF6600]" />
             Asset Type
           </CardTitle>
           <CardDescription>Choose the type of game asset to generate</CardDescription>
@@ -287,7 +288,7 @@ export function AssetTypeGenerator({
                   {selectedAssetType.name === "parallax" && (
                     <>
                       <div className="space-y-2">
-                        <Label>Number of Layers: {parameters.layers || 3}</Label>
+                        <Label>Number of LayersIcon: {parameters.layers || 3}</Label>
                         <Slider
                           value={[parameters.layers || 3]}
                           onValueChange={([value]) => setParameters((prev) => ({ ...prev, layers: value }))}
@@ -489,7 +490,7 @@ export function AssetTypeGenerator({
         <Card className="border-neutral-200 dark:border-neutral-800">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Eye className="w-5 h-5 text-[#FF6600]" />
+              <EyeIcon className="w-5 h-5 text-[#FF6600]" />
               Generation Preview
             </CardTitle>
           </CardHeader>
@@ -517,7 +518,7 @@ export function AssetTypeGenerator({
                 </>
               ) : (
                 <>
-                  <Wand2 className="w-4 h-4 mr-2" />
+                  <WandIcon className="w-4 h-4 mr-2" />
                   Generate {selectedAssetType.display_name}
                 </>
               )}

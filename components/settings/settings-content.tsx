@@ -1,15 +1,16 @@
 "use client"
 
 import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Separator } from "@/components/ui/separator"
-import { Badge } from "@/components/ui/badge"
+// Luxe UI + Origin UI Components - Elegant & Sophisticated
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/origin-ui/card"
+import { Button } from "@/components/luxe-ui/button"
+import { Input } from "@/components/origin-ui/input"
+import { Label } from "@/components/origin-ui/label"
+import { Switch } from "@/components/luxe-ui/switch"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/origin-ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/origin-ui/tabs"
+import { Separator } from "@/components/origin-ui/separator"
+import { Badge } from "@/components/luxe-ui/badge"
 import {
   UserIcon,
   BellIcon,
@@ -19,7 +20,7 @@ import {
   DatabaseIcon,
   KeyIcon,
   TrashIcon,
-} from "@/components/ui/icons"
+} from "@/components/rounded-icons/icons"
 import { useAuth } from "@/components/auth-guard"
 
 export function SettingsContent() {
@@ -112,7 +113,7 @@ export function SettingsContent() {
                   <Label htmlFor="bio">Bio</Label>
                   <Input id="bio" placeholder="Tell us about yourself" className="bg-white/50 dark:bg-neutral-900/50" />
                 </div>
-                <Button className="bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-200 dark:text-neutral-900">
+                <Button variant="elevated" className="">
                   Save Changes
                 </Button>
               </CardContent>
@@ -185,7 +186,7 @@ export function SettingsContent() {
                       <Label>Change Password</Label>
                       <p className="text-sm text-neutral-600 dark:text-neutral-400">Update your account password</p>
                     </div>
-                    <Button variant="outline" className="border-neutral-300 dark:border-neutral-600 bg-transparent">
+                    <Button variant="outline" className="">
                       Change Password
                     </Button>
                   </div>
@@ -197,7 +198,7 @@ export function SettingsContent() {
                         Add an extra layer of security to your account
                       </p>
                     </div>
-                    <Badge variant="secondary" className="bg-neutral-100 dark:bg-neutral-800">
+                    <Badge variant="muted" className="">
                       Not Enabled
                     </Badge>
                   </div>
@@ -212,7 +213,7 @@ export function SettingsContent() {
                         Manage your API keys for integrations
                       </p>
                     </div>
-                    <Button variant="outline" className="border-neutral-300 dark:border-neutral-600 bg-transparent">
+                    <Button variant="smooth" className="">
                       Manage Keys
                     </Button>
                   </div>
@@ -239,7 +240,7 @@ export function SettingsContent() {
                         Free Plan - 5,000 generations per month
                       </p>
                     </div>
-                    <Button variant="outline" className="border-neutral-300 dark:border-neutral-600 bg-transparent">
+                    <Button variant="elevated" size="lg" className="">
                       Upgrade Plan
                     </Button>
                   </div>
@@ -332,7 +333,7 @@ export function SettingsContent() {
               <CardContent>
                 <Button
                   variant="destructive"
-                  className="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800"
+                  size="lg"
                 >
                   Delete Account
                 </Button>

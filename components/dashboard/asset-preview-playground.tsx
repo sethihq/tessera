@@ -10,20 +10,20 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
-  Play,
-  Pause,
-  RotateCcw,
-  ZoomIn,
-  ZoomOut,
-  Grid3X3,
-  Layers,
-  Package,
-  Zap,
-  Eye,
-  Settings,
-  Download,
-  Maximize2,
-} from "lucide-react"
+  PlayIcon,
+  PauseIcon,
+  RotateCcwIcon,
+  ZoomInIcon,
+  ZoomOutIcon,
+  GridIcon,
+  LayersIcon,
+  PackageIcon,
+  GenerateIcon,
+  EyeIcon,
+  SettingsIcon,
+  DownloadIcon,
+  Maximize2Icon,
+} from "@/components/rounded-icons/icons"
 import type { GeneratedAsset, AssetType } from "@/lib/types"
 
 interface AssetPreviewPlaygroundProps {
@@ -272,15 +272,15 @@ export function AssetPreviewPlayground({
   const getPreviewIcon = () => {
     switch (assetType.name) {
       case "parallax":
-        return <Layers className="w-4 h-4" />
+        return <LayersIcon className="w-4 h-4" />
       case "tileset":
-        return <Grid3X3 className="w-4 h-4" />
+        return <GridIcon className="w-4 h-4" />
       case "props":
-        return <Package className="w-4 h-4" />
+        return <PackageIcon className="w-4 h-4" />
       case "fx":
-        return <Zap className="w-4 h-4" />
+        return <GenerateIcon className="w-4 h-4" />
       default:
-        return <Eye className="w-4 h-4" />
+        return <EyeIcon className="w-4 h-4" />
     }
   }
 
@@ -326,7 +326,7 @@ export function AssetPreviewPlayground({
                     onClick={() => setIsPlaying(!isPlaying)}
                     className="bg-white/90 dark:bg-neutral-800/90"
                   >
-                    {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                    {isPlaying ? <PauseIcon className="w-4 h-4" /> : <PlayIcon className="w-4 h-4" />}
                   </Button>
                   <Button
                     variant="secondary"
@@ -334,17 +334,17 @@ export function AssetPreviewPlayground({
                     onClick={resetPreview}
                     className="bg-white/90 dark:bg-neutral-800/90"
                   >
-                    <RotateCcw className="w-4 h-4" />
+                    <RotateCcwIcon className="w-4 h-4" />
                   </Button>
                   <Button variant="secondary" size="sm" className="bg-white/90 dark:bg-neutral-800/90">
-                    <Maximize2 className="w-4 h-4" />
+                    <Maximize2Icon className="w-4 h-4" />
                   </Button>
                 </div>
 
                 {/* Asset Type Specific Info */}
                 <div className="absolute bottom-4 left-4">
                   <Badge variant="secondary" className="bg-white/90 dark:bg-neutral-800/90">
-                    {assetType.name === "parallax" && `${asset.parameters?.layers || 3} Layers`}
+                    {assetType.name === "parallax" && `${asset.parameters?.layers || 3} LayersIcon`}
                     {assetType.name === "tileset" && `${asset.parameters?.tile_size || "32x32"} Tiles`}
                     {assetType.name === "props" && `${asset.parameters?.variations || 1} Variations`}
                     {assetType.name === "fx" && `${asset.parameters?.frame_count || 8} Frames`}
@@ -357,7 +357,7 @@ export function AssetPreviewPlayground({
                 {/* Zoom Control */}
                 <div className="space-y-2">
                   <Label className="flex items-center gap-2">
-                    <ZoomIn className="w-4 h-4" />
+                    <ZoomInIcon className="w-4 h-4" />
                     Zoom: {zoom}%
                   </Label>
                   <Slider
@@ -438,11 +438,11 @@ export function AssetPreviewPlayground({
 
               <div className="flex items-center justify-center gap-4">
                 <Button variant="outline" size="sm" onClick={() => setZoom(Math.max(25, zoom - 25))}>
-                  <ZoomOut className="w-4 h-4" />
+                  <ZoomOutIcon className="w-4 h-4" />
                 </Button>
                 <span className="text-sm font-medium">{zoom}%</span>
                 <Button variant="outline" size="sm" onClick={() => setZoom(Math.min(400, zoom + 25))}>
-                  <ZoomIn className="w-4 h-4" />
+                  <ZoomInIcon className="w-4 h-4" />
                 </Button>
               </div>
             </TabsContent>
@@ -518,18 +518,18 @@ export function AssetPreviewPlayground({
           <div className="flex items-center justify-between pt-4 border-t border-neutral-200 dark:border-neutral-800">
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm">
-                <Download className="w-4 h-4 mr-2" />
-                Download
+                <DownloadIcon className="w-4 h-4 mr-2" />
+                DownloadIcon
               </Button>
               <Button variant="outline" size="sm">
-                <Settings className="w-4 h-4 mr-2" />
+                <SettingsIcon className="w-4 h-4 mr-2" />
                 Adjust Parameters
               </Button>
             </div>
 
             {onRegenerate && (
               <Button onClick={onRegenerate} className="bg-[#FF6600] hover:bg-[#E55A00] text-white">
-                <RotateCcw className="w-4 h-4 mr-2" />
+                <RotateCcwIcon className="w-4 h-4 mr-2" />
                 Regenerate
               </Button>
             )}

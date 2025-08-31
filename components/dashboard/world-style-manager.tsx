@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { Palette, Eye, Plus, Trash2 } from "lucide-react"
+import { PaletteIconIcon, EyeIconIcon, PlusIconIcon, TrashIcon } from "@/components/rounded-icons/icons"
 import type { WorldStyle } from "@/lib/types"
 import { createClient } from "@/lib/supabase/client"
 
@@ -124,7 +124,7 @@ export function WorldStyleManager({ onStyleSelect, selectedStyleId }: WorldStyle
           </p>
         </div>
         <Button onClick={() => setIsCreating(true)} className="bg-[#FF6600] hover:bg-[#E55A00] text-white">
-          <Plus className="w-4 h-4 mr-2" />
+          <PlusIcon className="w-4 h-4 mr-2" />
           New Style
         </Button>
       </div>
@@ -204,15 +204,15 @@ export function WorldStyleManager({ onStyleSelect, selectedStyleId }: WorldStyle
                   }}
                   className="h-6 w-6 p-0 text-neutral-400 hover:text-red-500"
                 >
-                  <Trash2 className="w-3 h-3" />
+                  <TrashIcon className="w-3 h-3" />
                 </Button>
               </div>
             </CardHeader>
             <CardContent className="pt-0">
               <div className="flex items-center gap-2 text-xs text-neutral-600 dark:text-neutral-400">
-                <Palette className="w-3 h-3" />
+                <PaletteIcon className="w-3 h-3" />
                 <span>{style.extracted_palette.primary?.length || 0} colors</span>
-                <Eye className="w-3 h-3 ml-2" />
+                <EyeIcon className="w-3 h-3 ml-2" />
                 <span>{style.reference_images?.length || 0} refs</span>
               </div>
               {style.style_parameters && (
@@ -238,13 +238,13 @@ export function WorldStyleManager({ onStyleSelect, selectedStyleId }: WorldStyle
       {worldStyles.length === 0 && !isCreating && (
         <Card className="border-dashed border-2 border-neutral-300 dark:border-neutral-700">
           <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-            <Palette className="w-12 h-12 text-neutral-400 mb-4" />
+            <PaletteIcon className="w-12 h-12 text-neutral-400 mb-4" />
             <h3 className="text-lg font-medium text-neutral-900 dark:text-neutral-100 mb-2">No World Styles Yet</h3>
             <p className="text-neutral-600 dark:text-neutral-400 mb-4 max-w-sm">
               Create your first world style to ensure visual consistency across all your game assets.
             </p>
             <Button onClick={() => setIsCreating(true)} className="bg-[#FF6600] hover:bg-[#E55A00] text-white">
-              <Plus className="w-4 h-4 mr-2" />
+              <PlusIcon className="w-4 h-4 mr-2" />
               Create World Style
             </Button>
           </CardContent>

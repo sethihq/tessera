@@ -2,10 +2,10 @@
 
 import type React from "react"
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Button } from "@/components/origin-ui/button"
+import { Card, CardContent } from "@/components/origin-ui/card"
+import { Badge } from "@/components/origin-ui/badge"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/origin-ui/dropdown-menu"
 import { Download, Heart, ImageIcon, MoreHorizontal, Trash2 } from "lucide-react"
 import type { GeneratedAsset } from "@/lib/types"
 

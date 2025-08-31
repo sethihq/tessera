@@ -1,8 +1,9 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
+// Luxe UI + Origin UI Components
+import { Button } from "@/components/luxe-ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/origin-ui/card"
+import { Input } from "@/components/origin-ui/input"
 import {
   Sidebar,
   SidebarContent,
@@ -17,24 +18,26 @@ import {
   SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar"
-import { Tabs, TabsContent } from "@/components/ui/tabs"
+} from "@/components/luxe-ui/sidebar"
+import { Tabs, TabsContent } from "@/components/origin-ui/tabs"
 import { createClient } from "@/lib/supabase/client"
+import { SpriteSheetCreator } from "@/components/sprite-sheet/sprite-sheet-creator"
 import {
-  Home,
-  FolderPlus,
-  ImageIcon,
-  Sparkles,
-  Settings,
-  LogOut,
-  Plus,
-  Search,
-  Zap,
-  TrendingUp,
-  Calendar,
-  Download,
-  RefreshCw,
-} from "lucide-react"
+  HomeIcon,
+  ProjectsIcon,
+  AssetsIcon,
+  GenerateIcon,
+  SettingsIcon,
+  LogoutIcon,
+  PlusIcon,
+  SearchIcon,
+  DownloadIcon,
+  FolderPlusIcon,
+  CalendarIcon,
+  TrendingUpIcon,
+  GridIcon,
+  RefreshCwIcon,
+} from "@/components/rounded-icons/icons"
 import Link from "next/link"
 import { useRouter, usePathname } from "next/navigation"
 import { useState } from "react"
@@ -77,23 +80,28 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
   const menuItems = [
     {
       title: "Overview",
-      icon: Home,
+      icon: HomeIcon,
       value: "overview",
     },
     {
       title: "Projects",
-      icon: FolderPlus,
+      icon: ProjectsIcon,
       value: "projects",
     },
     {
       title: "Assets",
-      icon: ImageIcon,
+      icon: AssetsIcon,
       value: "assets",
     },
     {
       title: "Generate",
-      icon: Sparkles,
+      icon: GenerateIcon,
       value: "generate",
+    },
+    {
+      title: "Sprite Sheets",
+      icon: GridIcon,
+      value: "sprite-sheets",
     },
   ]
 
@@ -195,7 +203,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
             <SidebarHeader className="border-b border-neutral-200 dark:border-neutral-800 p-6">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 bg-[#FF6600] rounded-xl flex items-center justify-center shadow-sm">
-                  <Zap className="w-5 h-5 text-white" />
+                  <GenerateIcon className="w-5 h-5 text-white" />
                 </div>
                 <div>
                   <h2 className="font-semibold text-neutral-900 dark:text-neutral-100 text-sm">Tessera</h2>
@@ -239,7 +247,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                         className="h-10 px-3 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-200"
                       >
                         <Link href="/dashboard/settings" className="flex items-center gap-3">
-                          <Settings className="w-4 h-4" />
+                          <SettingsIcon className="w-4 h-4" />
                           <span className="text-sm font-medium">Settings</span>
                         </Link>
                       </SidebarMenuButton>
@@ -269,7 +277,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                 onClick={handleSignOut}
                 className="w-full justify-start h-9 bg-transparent"
               >
-                <LogOut className="w-4 h-4 mr-2" />
+                <LogoutIcon className="w-4 h-4 mr-2" />
                 <span className="text-sm">Sign out</span>
               </Button>
             </SidebarFooter>
@@ -287,7 +295,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                 onClick={() => setActiveTab("generate")}
                 className="bg-[#FF6600] hover:bg-[#E55A00] text-white shadow-sm h-9 px-4"
               >
-                <Plus className="w-4 h-4 mr-2" />
+                <PlusIcon className="w-4 h-4 mr-2" />
                 <span className="text-sm font-medium">Generate Asset</span>
               </Button>
             </header>
@@ -309,7 +317,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                     <Card className="border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-shadow duration-200">
                       <CardHeader className="pb-3">
                         <CardTitle className="text-sm font-medium text-neutral-600 dark:text-neutral-400 flex items-center gap-2">
-                          <FolderPlus className="w-4 h-4" />
+                          <FolderPlusIcon className="w-4 h-4" />
                           Total Projects
                         </CardTitle>
                       </CardHeader>
@@ -323,7 +331,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                     <Card className="border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-shadow duration-200">
                       <CardHeader className="pb-3">
                         <CardTitle className="text-sm font-medium text-neutral-600 dark:text-neutral-400 flex items-center gap-2">
-                          <ImageIcon className="w-4 h-4" />
+                          <AssetsIcon className="w-4 h-4" />
                           Assets Generated
                         </CardTitle>
                       </CardHeader>
@@ -335,7 +343,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                     <Card className="border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-shadow duration-200">
                       <CardHeader className="pb-3">
                         <CardTitle className="text-sm font-medium text-neutral-600 dark:text-neutral-400 flex items-center gap-2">
-                          <Calendar className="w-4 h-4" />
+                          <CalendarIcon className="w-4 h-4" />
                           This Month
                         </CardTitle>
                       </CardHeader>
@@ -353,7 +361,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                     <Card className="border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-shadow duration-200">
                       <CardHeader className="pb-3">
                         <CardTitle className="text-sm font-medium text-neutral-600 dark:text-neutral-400 flex items-center gap-2">
-                          <TrendingUp className="w-4 h-4" />
+                          <TrendingUpIcon className="w-4 h-4" />
                           Success Rate
                         </CardTitle>
                       </CardHeader>
@@ -381,7 +389,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                             disabled={isRefreshing}
                             className="h-9 bg-transparent"
                           >
-                            <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
+                            <RefreshCwIcon className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
                             <span className="text-sm">Refresh</span>
                           </Button>
                           <Button variant="outline" onClick={() => setActiveTab("assets")} className="h-9">
@@ -405,7 +413,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                                     className="w-full h-full object-cover rounded-lg"
                                   />
                                 ) : (
-                                  <ImageIcon className="w-8 h-8 text-neutral-400" />
+                                  <AssetsIcon className="w-8 h-8 text-neutral-400" />
                                 )}
                               </div>
                               <p className="text-xs font-medium text-neutral-900 dark:text-neutral-100 truncate">
@@ -426,11 +434,11 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                 <TabsContent value="projects" className="space-y-6">
                   <div className="flex items-center gap-4">
                     <div className="relative flex-1 max-w-md">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-neutral-400" />
+                      <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-neutral-400" />
                       <Input
-                        placeholder="Search projects..."
+                        placeholder="SearchIcon projects..."
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={(e) => setSearchIconQuery(e.target.value)}
                         className="pl-10"
                       />
                     </div>
@@ -463,7 +471,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                   ) : (
                     <Card className="border border-neutral-200 dark:border-neutral-800 shadow-sm">
                       <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-                        <FolderPlus className="w-16 h-16 text-neutral-400 mb-6" />
+                        <FolderPlusIcon className="w-16 h-16 text-neutral-400 mb-6" />
                         <h3 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
                           No projects yet
                         </h3>
@@ -474,7 +482,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                           onClick={() => setActiveTab("generate")}
                           className="bg-[#FF6600] hover:bg-[#E55A00] text-white"
                         >
-                          <Plus className="w-4 h-4 mr-2" />
+                          <PlusIcon className="w-4 h-4 mr-2" />
                           Create Your First Project
                         </Button>
                       </CardContent>
@@ -486,11 +494,11 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                 <TabsContent value="assets" className="space-y-6">
                   <div className="flex items-center gap-4">
                     <div className="relative flex-1 max-w-md">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-neutral-400" />
+                      <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-neutral-400" />
                       <Input
-                        placeholder="Search assets..."
+                        placeholder="SearchIcon assets..."
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={(e) => setSearchIconQuery(e.target.value)}
                         className="pl-10"
                       />
                     </div>
@@ -513,7 +521,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                                 />
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center">
-                                  <ImageIcon className="w-12 h-12 text-neutral-400" />
+                                  <AssetsIcon className="w-12 h-12 text-neutral-400" />
                                 </div>
                               )}
                               <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -526,7 +534,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                                     // Handle download
                                   }}
                                 >
-                                  <Download className="w-4 h-4" />
+                                  <DownloadIcon className="w-4 h-4" />
                                 </Button>
                               </div>
                             </div>
@@ -546,7 +554,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                   ) : (
                     <Card className="border border-neutral-200 dark:border-neutral-800 shadow-sm">
                       <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-                        <ImageIcon className="w-16 h-16 text-neutral-400 mb-4" />
+                        <AssetsIcon className="w-16 h-16 text-neutral-400 mb-4" />
                         <h3 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
                           No assets found
                         </h3>
@@ -663,18 +671,31 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                       >
                         {isGenerating ? (
                           <>
-                            <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                            <RefreshCwIcon className="w-4 h-4 mr-2 animate-spin" />
                             Generating Asset...
                           </>
                         ) : (
                           <>
-                            <Sparkles className="w-4 h-4 mr-2" />
+                            <GenerateIcon className="w-4 h-4 mr-2" />
                             Generate Asset
                           </>
                         )}
                       </Button>
                     </CardContent>
                   </Card>
+                </TabsContent>
+
+                {/* Sprite Sheets Tab */}
+                <TabsContent value="sprite-sheets" className="space-y-6">
+                  <SpriteSheetCreator 
+                    projects={projects}
+                    worldStyles={[]} // TODO: Fetch world styles
+                    templates={[]} // TODO: Fetch templates
+                    onSpriteSheetCreated={(spriteSheet) => {
+                      console.log("Sprite sheet created:", spriteSheet)
+                      // TODO: Handle sprite sheet creation
+                    }}
+                  />
                 </TabsContent>
               </Tabs>
             </main>
