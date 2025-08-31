@@ -3,6 +3,9 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
   Sidebar,
   SidebarContent,
@@ -51,6 +54,18 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
   const supabase = createClient()
   const [activeTab, setActiveTab] = useState("overview")
   const [searchQuery, setSearchQuery] = useState("")
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [generateForm, setGenerateForm] = useState({
+    prompt: "",
+    projectId: "",
+    newProjectName: "",
+    styleReference: "",
+    parameters: {
+      style: "realistic",
+      quality: "high",
+      aspectRatio: "1:1",
+    },
+  })
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
@@ -92,18 +107,59 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
       asset.asset_projects?.name.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
-  const handleGenerateClick = () => {
-    router.push("/dashboard/generate")
+  const handleGenerate = async () => {
+    if (!generateForm.prompt.trim()) return
+
+    setIsGenerating(true)
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: generateForm.prompt,
+          projectId: generateForm.projectId || null,
+          newProjectName: generateForm.newProjectName || null,
+          styleReferenceUrl: generateForm.styleReference || null,
+          parameters: generateForm.parameters,
+        }),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        // Reset form and switch to assets tab to show the new asset
+        setGenerateForm({
+          prompt: "",
+          projectId: "",
+          newProjectName: "",
+          styleReference: "",
+          parameters: {
+            style: "realistic",
+            quality: "high",
+            aspectRatio: "1:1",
+          },
+        })
+        setActiveTab("assets")
+        // Refresh the page to show new asset
+        router.refresh()
+      } else {
+        console.error("Generation failed:", result.error)
+      }
+    } catch (error) {
+      console.error("Generation error:", error)
+    } finally {
+      setIsGenerating(false)
+    }
   }
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-gradient-to-br from-neutral-50 via-white to-neutral-100 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-800">
-        <Sidebar className="border-r border-neutral-200/60 dark:border-neutral-800/60 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl">
-          <SidebarHeader className="border-b border-neutral-200/60 dark:border-neutral-800/60 p-6">
+      <div className="flex min-h-screen w-full bg-neutral-50 dark:bg-neutral-950">
+        <Sidebar className="border-r border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
+          <SidebarHeader className="border-b border-neutral-200 dark:border-neutral-800 p-6">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 bg-gradient-to-br from-neutral-800 to-neutral-600 dark:from-neutral-200 dark:to-neutral-400 rounded-xl flex items-center justify-center shadow-sm">
-                <Zap className="w-5 h-5 text-white dark:text-neutral-900" />
+              <div className="w-9 h-9 bg-accent rounded-xl flex items-center justify-center shadow-sm">
+                <Zap className="w-5 h-5 text-accent-foreground" />
               </div>
               <div>
                 <h2 className="font-semibold text-neutral-900 dark:text-neutral-100 text-sm">AI Asset Creator</h2>
@@ -122,15 +178,9 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                   {menuItems.map((item) => (
                     <SidebarMenuItem key={item.value}>
                       <SidebarMenuButton
-                        onClick={() => {
-                          if (item.value === "generate") {
-                            handleGenerateClick()
-                          } else {
-                            setActiveTab(item.value)
-                          }
-                        }}
+                        onClick={() => setActiveTab(item.value)}
                         isActive={activeTab === item.value}
-                        className="h-10 px-3 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800/60 data-[active=true]:bg-neutral-900 data-[active=true]:text-white dark:data-[active=true]:bg-neutral-100 dark:data-[active=true]:text-neutral-900 transition-all duration-200"
+                        className="h-10 px-3 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 data-[active=true]:bg-accent data-[active=true]:text-accent-foreground transition-all duration-200"
                       >
                         <item.icon className="w-4 h-4" />
                         <span className="text-sm font-medium">{item.title}</span>
@@ -150,7 +200,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                   <SidebarMenuItem>
                     <SidebarMenuButton
                       asChild
-                      className="h-10 px-3 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800/60 transition-all duration-200"
+                      className="h-10 px-3 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-200"
                     >
                       <Link href="/dashboard/settings" className="flex items-center gap-3">
                         <Settings className="w-4 h-4" />
@@ -163,10 +213,10 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
             </SidebarGroup>
           </SidebarContent>
 
-          <SidebarFooter className="border-t border-neutral-200/60 dark:border-neutral-800/60 p-4">
+          <SidebarFooter className="border-t border-neutral-200 dark:border-neutral-800 p-4">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-neutral-400 to-neutral-600 dark:from-neutral-500 dark:to-neutral-300 rounded-full flex items-center justify-center">
-                <span className="text-xs font-semibold text-white dark:text-neutral-900">
+              <div className="w-8 h-8 bg-neutral-200 dark:bg-neutral-700 rounded-full flex items-center justify-center">
+                <span className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
                   {profile?.full_name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase()}
                 </span>
               </div>
@@ -181,7 +231,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
               variant="outline"
               size="sm"
               onClick={handleSignOut}
-              className="w-full justify-start bg-transparent border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800/60 h-9"
+              className="w-full justify-start h-9 bg-transparent"
             >
               <LogOut className="w-4 h-4 mr-2" />
               <span className="text-sm">Sign out</span>
@@ -190,16 +240,16 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
         </Sidebar>
 
         <SidebarInset className="flex-1">
-          <header className="flex h-16 items-center gap-4 border-b border-neutral-200/60 dark:border-neutral-800/60 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl px-6">
-            <SidebarTrigger className="hover:bg-neutral-100 dark:hover:bg-neutral-800/60 rounded-lg" />
+          <header className="flex h-16 items-center gap-4 border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-6">
+            <SidebarTrigger className="hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg" />
             <div className="flex-1">
               <h1 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                 {menuItems.find((item) => item.value === activeTab)?.title || "Dashboard"}
               </h1>
             </div>
             <Button
-              onClick={handleGenerateClick}
-              className="bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-200 dark:text-neutral-900 text-white shadow-sm h-9 px-4"
+              onClick={() => setActiveTab("generate")}
+              className="bg-accent hover:bg-accent/90 text-accent-foreground shadow-sm h-9 px-4"
             >
               <Plus className="w-4 h-4 mr-2" />
               <span className="text-sm font-medium">Generate Asset</span>
@@ -222,7 +272,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
 
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                  <Card className="bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl border border-neutral-200/60 dark:border-neutral-800/60 shadow-sm hover:shadow-md transition-shadow duration-200">
+                  <Card className="border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-shadow duration-200">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-sm font-medium text-neutral-600 dark:text-neutral-400 flex items-center gap-2">
                         <FolderPlus className="w-4 h-4" />
@@ -234,7 +284,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl border border-neutral-200/60 dark:border-neutral-800/60 shadow-sm hover:shadow-md transition-shadow duration-200">
+                  <Card className="border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-shadow duration-200">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-sm font-medium text-neutral-600 dark:text-neutral-400 flex items-center gap-2">
                         <ImageIcon className="w-4 h-4" />
@@ -248,7 +298,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl border border-neutral-200/60 dark:border-neutral-800/60 shadow-sm hover:shadow-md transition-shadow duration-200">
+                  <Card className="border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-shadow duration-200">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-sm font-medium text-neutral-600 dark:text-neutral-400 flex items-center gap-2">
                         <Calendar className="w-4 h-4" />
@@ -266,7 +316,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl border border-neutral-200/60 dark:border-neutral-800/60 shadow-sm hover:shadow-md transition-shadow duration-200">
+                  <Card className="border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-shadow duration-200">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-sm font-medium text-neutral-600 dark:text-neutral-400 flex items-center gap-2">
                         <TrendingUp className="w-4 h-4" />
@@ -290,11 +340,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Recent Projects</h3>
-                    <Button
-                      variant="outline"
-                      onClick={() => setActiveTab("projects")}
-                      className="bg-transparent border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800/60 h-9"
-                    >
+                    <Button variant="outline" onClick={() => setActiveTab("projects")} className="h-9">
                       <span className="text-sm">View all</span>
                     </Button>
                   </div>
@@ -304,10 +350,10 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                       {projects.slice(0, 6).map((project) => (
                         <Card
                           key={project.id}
-                          className="bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl border border-neutral-200/60 dark:border-neutral-800/60 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer group"
+                          className="border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer group"
                         >
                           <CardHeader>
-                            <CardTitle className="text-base group-hover:text-neutral-700 dark:group-hover:text-neutral-300 transition-colors">
+                            <CardTitle className="text-base group-hover:text-accent transition-colors">
                               {project.name}
                             </CardTitle>
                             {project.description && (
@@ -325,7 +371,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                       ))}
                     </div>
                   ) : (
-                    <Card className="bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl border border-neutral-200/60 dark:border-neutral-800/60 shadow-sm">
+                    <Card className="border border-neutral-200 dark:border-neutral-800 shadow-sm">
                       <CardContent className="flex flex-col items-center justify-center py-12 text-center">
                         <FolderPlus className="w-12 h-12 text-neutral-400 mb-4" />
                         <h4 className="text-lg font-medium text-neutral-900 dark:text-neutral-100 mb-2">
@@ -335,8 +381,8 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                           Create your first project to start generating amazing assets.
                         </p>
                         <Button
-                          onClick={handleGenerateClick}
-                          className="bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-200 dark:text-neutral-900 text-white shadow-sm"
+                          onClick={() => setActiveTab("generate")}
+                          className="bg-accent hover:bg-accent/90 text-accent-foreground"
                         >
                           <Plus className="w-4 h-4 mr-2" />
                           Create Project
@@ -351,11 +397,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Recent Assets</h3>
-                      <Button
-                        variant="outline"
-                        onClick={() => setActiveTab("assets")}
-                        className="bg-transparent border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800/60 h-9"
-                      >
+                      <Button variant="outline" onClick={() => setActiveTab("assets")} className="h-9">
                         <span className="text-sm">View all</span>
                       </Button>
                     </div>
@@ -364,7 +406,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                       {recentAssets.slice(0, 6).map((asset) => (
                         <Card
                           key={asset.id}
-                          className="bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl border border-neutral-200/60 dark:border-neutral-800/60 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer aspect-square group"
+                          className="border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer aspect-square group"
                         >
                           <CardContent className="p-3">
                             <div className="aspect-square bg-neutral-100 dark:bg-neutral-800 rounded-lg mb-2 flex items-center justify-center group-hover:bg-neutral-200 dark:group-hover:bg-neutral-700 transition-colors">
@@ -402,7 +444,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                       placeholder="Search projects..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm border-0 shadow-sm"
+                      className="pl-10"
                     />
                   </div>
                 </div>
@@ -413,10 +455,10 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                     {filteredProjects.map((project) => (
                       <Card
                         key={project.id}
-                        className="bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer group"
+                        className="border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer group"
                       >
                         <CardHeader>
-                          <CardTitle className="text-lg group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                          <CardTitle className="text-lg group-hover:text-accent transition-colors">
                             {project.name}
                           </CardTitle>
                           {project.description && (
@@ -433,7 +475,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                     ))}
                   </div>
                 ) : projects.length === 0 ? (
-                  <Card className="bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm border-0 shadow-lg">
+                  <Card className="border border-neutral-200 dark:border-neutral-800 shadow-sm">
                     <CardContent className="flex flex-col items-center justify-center py-16 text-center">
                       <FolderPlus className="w-16 h-16 text-neutral-400 mb-6" />
                       <h3 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
@@ -442,14 +484,17 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                       <p className="text-neutral-600 dark:text-neutral-400 mb-6 max-w-md">
                         Create your first project to start generating amazing game assets with AI.
                       </p>
-                      <Button onClick={handleGenerateClick} className="bg-gradient-to-r from-blue-500 to-purple-600">
+                      <Button
+                        onClick={() => setActiveTab("generate")}
+                        className="bg-accent hover:bg-accent/90 text-accent-foreground"
+                      >
                         <Plus className="w-4 h-4 mr-2" />
                         Create Your First Project
                       </Button>
                     </CardContent>
                   </Card>
                 ) : (
-                  <Card className="bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm border-0 shadow-lg">
+                  <Card className="border border-neutral-200 dark:border-neutral-800 shadow-sm">
                     <CardContent className="flex flex-col items-center justify-center py-16 text-center">
                       <Search className="w-16 h-16 text-neutral-400 mb-6" />
                       <h3 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
@@ -458,7 +503,10 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                       <p className="text-neutral-600 dark:text-neutral-400 mb-6">
                         Try adjusting your search terms or create a new project.
                       </p>
-                      <Button onClick={handleGenerateClick} className="bg-gradient-to-r from-blue-500 to-purple-600">
+                      <Button
+                        onClick={() => setActiveTab("generate")}
+                        className="bg-accent hover:bg-accent/90 text-accent-foreground"
+                      >
                         <Plus className="w-4 h-4 mr-2" />
                         Create New Project
                       </Button>
@@ -477,7 +525,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                       placeholder="Search assets..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm border-0 shadow-sm"
+                      className="pl-10"
                     />
                   </div>
                 </div>
@@ -488,7 +536,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                     {filteredAssets.map((asset) => (
                       <Card
                         key={asset.id}
-                        className="bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all cursor-pointer overflow-hidden group"
+                        className="border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all cursor-pointer overflow-hidden group"
                       >
                         <CardContent className="p-0">
                           <div className="aspect-square bg-neutral-100 dark:bg-neutral-700 relative overflow-hidden">
@@ -527,7 +575,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                     ))}
                   </div>
                 ) : (
-                  <Card className="bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm border-0 shadow-xl">
+                  <Card className="border border-neutral-200 dark:border-neutral-800 shadow-sm">
                     <CardContent className="flex flex-col items-center justify-center py-16 text-center">
                       <ImageIcon className="w-16 h-16 text-neutral-400 mb-4" />
                       <h3 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
@@ -536,7 +584,10 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                       <p className="text-neutral-600 dark:text-neutral-400 mb-6">
                         {searchQuery ? "Try adjusting your search" : "Start generating assets to see them here"}
                       </p>
-                      <Button onClick={handleGenerateClick} className="bg-gradient-to-r from-blue-500 to-purple-600">
+                      <Button
+                        onClick={() => setActiveTab("generate")}
+                        className="bg-accent hover:bg-accent/90 text-accent-foreground"
+                      >
                         Generate Your First Asset
                       </Button>
                     </CardContent>
@@ -544,23 +595,161 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                 )}
               </TabsContent>
 
-              {/* Generate Tab */}
               <TabsContent value="generate" className="space-y-6">
-                <Card className="bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm border-0 shadow-xl">
-                  <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-                    <Sparkles className="w-16 h-16 text-neutral-400 mb-4" />
-                    <h3 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
-                      Asset Generation
-                    </h3>
-                    <p className="text-neutral-600 dark:text-neutral-400 mb-6">
-                      Ready to create amazing assets? Use our dedicated generation page.
-                    </p>
+                <Card className="border border-neutral-200 dark:border-neutral-800 shadow-sm">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Sparkles className="w-5 h-5 text-accent" />
+                      Generate AI Asset
+                    </CardTitle>
+                    <CardDescription>
+                      Create amazing game assets using AI. Describe what you want and let our AI bring it to life.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="prompt">Asset Description</Label>
+                      <Textarea
+                        id="prompt"
+                        placeholder="Describe the asset you want to create (e.g., 'A medieval sword with glowing runes')"
+                        value={generateForm.prompt}
+                        onChange={(e) => setGenerateForm((prev) => ({ ...prev, prompt: e.target.value }))}
+                        className="min-h-[100px]"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="project">Project</Label>
+                        <Select
+                          value={generateForm.projectId}
+                          onValueChange={(value) => setGenerateForm((prev) => ({ ...prev, projectId: value }))}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select existing project or create new" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="new">Create New Project</SelectItem>
+                            {projects.map((project) => (
+                              <SelectItem key={project.id} value={project.id}>
+                                {project.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {generateForm.projectId === "new" && (
+                        <div className="space-y-2">
+                          <Label htmlFor="newProject">New Project Name</Label>
+                          <Input
+                            id="newProject"
+                            placeholder="Enter project name"
+                            value={generateForm.newProjectName}
+                            onChange={(e) => setGenerateForm((prev) => ({ ...prev, newProjectName: e.target.value }))}
+                          />
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="style">Style</Label>
+                        <Select
+                          value={generateForm.parameters.style}
+                          onValueChange={(value) =>
+                            setGenerateForm((prev) => ({
+                              ...prev,
+                              parameters: { ...prev.parameters, style: value },
+                            }))
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="realistic">Realistic</SelectItem>
+                            <SelectItem value="cartoon">Cartoon</SelectItem>
+                            <SelectItem value="pixel-art">Pixel Art</SelectItem>
+                            <SelectItem value="fantasy">Fantasy</SelectItem>
+                            <SelectItem value="sci-fi">Sci-Fi</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="quality">Quality</Label>
+                        <Select
+                          value={generateForm.parameters.quality}
+                          onValueChange={(value) =>
+                            setGenerateForm((prev) => ({
+                              ...prev,
+                              parameters: { ...prev.parameters, quality: value },
+                            }))
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="draft">Draft</SelectItem>
+                            <SelectItem value="standard">Standard</SelectItem>
+                            <SelectItem value="high">High</SelectItem>
+                            <SelectItem value="ultra">Ultra</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="aspect">Aspect Ratio</Label>
+                        <Select
+                          value={generateForm.parameters.aspectRatio}
+                          onValueChange={(value) =>
+                            setGenerateForm((prev) => ({
+                              ...prev,
+                              parameters: { ...prev.parameters, aspectRatio: value },
+                            }))
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="1:1">Square (1:1)</SelectItem>
+                            <SelectItem value="16:9">Landscape (16:9)</SelectItem>
+                            <SelectItem value="9:16">Portrait (9:16)</SelectItem>
+                            <SelectItem value="4:3">Classic (4:3)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="styleRef">Style Reference URL (Optional)</Label>
+                      <Input
+                        id="styleRef"
+                        placeholder="https://example.com/reference-image.jpg"
+                        value={generateForm.styleReference}
+                        onChange={(e) => setGenerateForm((prev) => ({ ...prev, styleReference: e.target.value }))}
+                      />
+                    </div>
+
                     <Button
-                      onClick={handleGenerateClick}
-                      className="bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-200 dark:text-neutral-900 text-white shadow-sm"
+                      onClick={handleGenerate}
+                      disabled={!generateForm.prompt.trim() || isGenerating}
+                      className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
                     >
-                      <Sparkles className="w-4 h-4 mr-2" />
-                      Go to Generator
+                      {isGenerating ? (
+                        <>
+                          <div className="w-4 h-4 mr-2 animate-spin rounded-full border-2 border-accent-foreground/30 border-t-accent-foreground" />
+                          Generating...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-4 h-4 mr-2" />
+                          Generate Asset
+                        </>
+                      )}
                     </Button>
                   </CardContent>
                 </Card>
