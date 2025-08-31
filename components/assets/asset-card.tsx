@@ -18,19 +18,16 @@ export function AssetCard({ asset, onSelect }: AssetCardProps) {
   const handleDownload = async (e: React.MouseEvent) => {
     e.stopPropagation()
     // TODO: Implement download functionality
-    console.log("Download asset:", asset.id)
   }
 
   const handleDelete = async (e: React.MouseEvent) => {
     e.stopPropagation()
     // TODO: Implement delete functionality
-    console.log("Delete asset:", asset.id)
   }
 
   const handleFavorite = async (e: React.MouseEvent) => {
     e.stopPropagation()
     // TODO: Implement favorite functionality
-    console.log("Favorite asset:", asset.id)
   }
 
   return (

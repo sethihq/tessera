@@ -50,18 +50,15 @@ export function AssetDetailModal({ asset, onClose }: AssetDetailModalProps) {
 
   const handleShare = async () => {
     // TODO: Implement share functionality
-    console.log("Share asset:", asset.id)
   }
 
   const handleDelete = async () => {
     // TODO: Implement delete functionality
-    console.log("Delete asset:", asset.id)
     onClose()
   }
 
   const handleFavorite = async () => {
     // TODO: Implement favorite functionality
-    console.log("Favorite asset:", asset.id)
   }
 
   return (

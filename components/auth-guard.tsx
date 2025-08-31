@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useSession } from "@/lib/auth-client"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
@@ -36,13 +35,4 @@ export function AuthGuard({ children, fallback }: AuthGuardProps) {
   }
 
   return <>{children}</>
-}
-
-export function useAuth() {
-  const { data: session, isPending } = useSession()
-  return {
-    user: session?.user || null,
-    session,
-    isLoading: isPending,
-  }
 }

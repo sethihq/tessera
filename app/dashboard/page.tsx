@@ -1,16 +1,13 @@
-import { auth } from "@/lib/auth"
+import { getSession } from "@/lib/auth"
 import { redirect } from "next/navigation"
-import { headers } from "next/headers"
 import { DashboardContent } from "@/components/dashboard/dashboard-content"
 import { db, profiles, assetProjects, generatedAssets } from "@/lib/db"
 import { eq, desc } from "drizzle-orm"
 
 export default async function DashboardPage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
+  const session = await getSession()
 
-  if (!session) {
+  if (!session?.user) {
     redirect("/auth/sign-in")
   }
 

@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation"
-import { auth } from "@/lib/auth"
-import { headers } from "next/headers"
+import { getSession } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { generatedAssets, assetProjects } from "@/lib/db/schema"
 import { eq, ilike, desc, asc } from "drizzle-orm"
@@ -11,9 +10,7 @@ export default async function AssetsPage({
 }: {
   searchParams: Promise<{ search?: string; project?: string; sort?: string }>
 }) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
+  const session = await getSession()
 
   if (!session?.user) {
     redirect("/auth/sign-in")

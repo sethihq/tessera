@@ -1,24 +1,28 @@
 import { redirect } from "next/navigation"
-import { createClient } from "@/lib/supabase/server"
+import { getSession } from "@/lib/auth"
+import { db } from "@/lib/db"
+import { assetProjects } from "@/lib/db/schema"
+import { eq, desc } from "drizzle-orm"
 import { GenerateContent } from "@/components/generate/generate-content"
 
 export default async function GeneratePage() {
-  const supabase = await createClient()
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser()
+  const session = await getSession()
 
-  if (error || !user) {
-    redirect("/auth/login")
+  if (!session?.user) {
+    redirect("/auth/sign-in")
   }
 
-  // Get user's projects for the dropdown
-  const { data: projects } = await supabase
-    .from("asset_projects")
-    .select("*")
-    .eq("user_id", user.id)
-    .order("updated_at", { ascending: false })
+  let projects: any[] = []
+  try {
+    projects = await db
+      .select()
+      .from(assetProjects)
+      .where(eq(assetProjects.userId, session.user.id))
+      .orderBy(desc(assetProjects.updatedAt))
+  } catch (error) {
+    console.error("[v0] Error fetching projects:", error)
+    // Continue with empty projects array
+  }
 
-  return <GenerateContent user={user} projects={projects || []} />
+  return <GenerateContent projects={projects} />
 }

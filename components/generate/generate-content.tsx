@@ -8,13 +8,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Switch } from "@/components/ui/switch"
-import { useAuth } from "@/components/auth-guard"
-import type { AssetProject, GenerationParameters } from "@/lib/types"
+import { useAuth } from "@/lib/auth-client"
+import type { AssetProject } from "@/lib/db"
 import { ArrowLeft, ImageIcon, Loader2, Sparkles, Wand2 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { FileUpload } from "@/components/ui/file-upload"
+
+interface GenerationParameters {
+  style?: string
+  quality?: "standard" | "hd"
+  size?: "1024x1024" | "1792x1024" | "1024x1792"
+  batch_size?: number
+}
 
 interface GenerateContentProps {
   projects: AssetProject[]
