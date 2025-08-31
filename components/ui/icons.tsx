@@ -199,3 +199,174 @@ export const FilterIcon = ({ className = "", size = 20 }: IconProps) => (
     <path d="M22 3H2L10 12.46V19L14 21V12.46L22 3Z" fill="currentColor" opacity="0.2" />
   </svg>
 )
+
+export const BellIcon = ({ className = "", size = 20 }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path
+      d="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      opacity="0.6"
+    />
+    <path
+      d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      opacity="0.6"
+    />
+    <path
+      d="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z"
+      fill="currentColor"
+      opacity="0.2"
+    />
+  </svg>
+)
+
+export const UserIcon = ({ className = "", size = 20 }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path
+      d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      opacity="0.6"
+    />
+    <path
+      d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z"
+      fill="currentColor"
+      opacity="0.2"
+    />
+  </svg>
+)
+
+export const ShieldIcon = ({ className = "", size = 20 }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path
+      d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      opacity="0.6"
+    />
+    <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" fill="currentColor" opacity="0.2" />
+  </svg>
+)
+
+export const CreditCardIcon = ({ className = "", size = 20 }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path
+      d="M21 4H3C1.89543 4 1 4.89543 1 6V18C1 19.1046 1.89543 20 3 20H21C22.1046 20 23 19.1046 23 18V6C23 4.89543 22.1046 4 21 4Z"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      opacity="0.6"
+    />
+    <path
+      d="M1 10H23"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      opacity="0.6"
+    />
+    <path
+      d="M21 4H3C1.89543 4 1 4.89543 1 6V18C1 19.1046 1.89543 20 3 20H21C22.1046 20 23 19.1046 23 18V6C23 4.89543 22.1046 4 21 4Z"
+      fill="currentColor"
+      opacity="0.2"
+    />
+  </svg>
+)
+
+export const PaletteIcon = ({ className = "", size = 20 }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path
+      d="M12 2C13.3132 2 14.6136 2.25866 15.8268 2.7612C17.0401 3.26375 18.1425 4.00035 19.0711 4.92893C19.9997 5.85752 20.7362 6.95991 21.2388 8.17317C21.7413 9.38642 22 10.6868 22 12C22 13.3132 21.7413 14.6136 21.2388 15.8268C20.7362 17.0401 19.9997 18.1425 19.0711 19.0711C18.1425 19.9997 17.0401 20.7362 15.8268 21.2388C14.6136 21.7413 13.3132 22 12 22C9.61305 22 7.32387 21.0518 5.63604 19.364C3.94821 17.6761 3 15.3869 3 13C3 10.6131 3.94821 8.32387 5.63604 6.63604C7.32387 4.94821 9.61305 4 12 4C12.39 4 12.78 4.03 13.16 4.09C13.54 4.15 13.91 4.24 14.27 4.34C14.63 4.44 14.98 4.56 15.32 4.7C15.66 4.84 15.98 5 16.29 5.17C16.6 5.34 16.9 5.53 17.18 5.73C17.46 5.93 17.72 6.15 17.97 6.38C18.22 6.61 18.45 6.86 18.66 7.12C18.87 7.38 19.06 7.66 19.23 7.95C19.4 8.24 19.55 8.54 19.68 8.85C19.81 9.16 19.92 9.48 20.01 9.81C20.1 10.14 20.17 10.47 20.22 10.81C20.27 11.15 20.3 11.49 20.31 11.84C20.32 12.19 20.31 12.54 20.28 12.89C20.25 13.24 20.2 13.58 20.13 13.92C20.06 14.26 19.97 14.59 19.86 14.92C19.75 15.25 19.62 15.57 19.47 15.88C19.32 16.19 19.15 16.49 18.96 16.78C18.77 17.07 18.56 17.35 18.33 17.61C18.1 17.87 17.85 18.12 17.58 18.35C17.31 18.58 17.02 18.79 16.72 18.98C16.42 19.17 16.1 19.34 15.77 19.49C15.44 19.64 15.1 19.77 14.75 19.87C14.4 19.97 14.04 20.05 13.67 20.11C13.3 20.17 12.92 20.21 12.54 20.23C12.16 20.25 11.78 20.25 11.4 20.23C11.02 20.21 10.64 20.17 10.27 20.11C9.9 20.05 9.54 19.97 9.19 19.87C8.84 19.77 8.5 19.64 8.17 19.49C7.84 19.34 7.52 19.17 7.22 18.98C6.92 18.79 6.63 18.58 6.36 18.35C6.09 18.12 5.84 17.87 5.61 17.61C5.38 17.35 5.17 17.07 4.98 16.78C4.79 16.49 4.62 16.19 4.47 15.88C4.32 15.57 4.19 15.25 4.08 14.92C3.97 14.59 3.88 14.26 3.81 13.92C3.74 13.58 3.69 13.24 3.66 12.89C3.63 12.54 3.62 12.19 3.63 11.84C3.64 11.49 3.67 11.15 3.72 10.81C3.77 10.47 3.84 10.14 3.93 9.81C4.02 9.48 4.13 9.16 4.26 8.85C4.39 8.54 4.54 8.24 4.71 7.95C4.88 7.66 5.07 7.38 5.28 7.12C5.49 6.86 5.72 6.61 5.97 6.38C6.22 6.15 6.48 5.93 6.76 5.73C7.04 5.53 7.34 5.34 7.65 5.17C7.96 5 8.28 4.84 8.62 4.7C8.96 4.56 9.31 4.44 9.67 4.34C10.03 4.24 10.4 4.15 10.78 4.09C11.16 4.03 11.55 4 11.94 4H12Z"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      opacity="0.6"
+    />
+    <path
+      d="M8.21 13.89L7.83 14.27C7.42 14.68 7.42 15.34 7.83 15.75C8.24 16.16 8.9 16.16 9.31 15.75L9.69 15.37C10.1 14.96 10.1 14.3 9.69 13.89C9.28 13.48 8.62 13.48 8.21 13.89Z"
+      fill="currentColor"
+    />
+    <path
+      d="M10.83 11.27L10.45 11.65C10.04 12.06 10.04 12.72 10.45 13.13C10.86 13.54 11.52 13.54 11.93 13.13L12.31 12.75C12.72 12.34 12.72 11.68 12.31 11.27C11.9 10.86 11.24 10.86 10.83 11.27Z"
+      fill="currentColor"
+    />
+    <path
+      d="M13.45 8.65L13.07 9.03C12.66 9.44 12.66 10.1 13.07 10.51C13.48 10.92 14.14 10.92 14.55 10.51L14.93 10.13C15.34 9.72 15.34 9.06 14.93 8.65C14.52 8.24 13.86 8.24 13.45 8.65Z"
+      fill="currentColor"
+    />
+    <path
+      d="M16.07 6.03L15.69 6.41C15.28 6.82 15.28 7.48 15.69 7.89C16.1 8.3 16.76 8.3 17.17 7.89L17.55 7.51C17.96 7.1 17.96 6.44 17.55 6.03C17.14 5.62 16.48 5.62 16.07 6.03Z"
+      fill="currentColor"
+    />
+  </svg>
+)
+
+export const DatabaseIcon = ({ className = "", size = 20 }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path
+      d="M21 12C21 13.66 16.97 15 12 15C7.03 15 3 13.66 3 12M21 5C21 6.66 16.97 8 12 8C7.03 8 3 6.66 3 5C3 3.34 7.03 2 12 2C16.97 2 21 3.34 21 5ZM21 5V19C21 20.66 16.97 22 12 22C7.03 22 3 20.66 3 19V5"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      opacity="0.6"
+    />
+    <path
+      d="M21 5C21 6.66 16.97 8 12 8C7.03 8 3 6.66 3 5C3 3.34 7.03 2 12 2C16.97 2 21 3.34 21 5Z"
+      fill="currentColor"
+      opacity="0.2"
+    />
+  </svg>
+)
+
+export const KeyIcon = ({ className = "", size = 20 }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path
+      d="M21 2L19 4M7 7L4.3 9.7C4.1 9.9 4 10.2 4 10.5V14.5C4 14.8 4.1 15.1 4.3 15.3L9.7 20.7C9.9 20.9 10.2 21 10.5 21H14.5C14.8 21 15.1 20.9 15.3 20.7L18 18M7 7L18 18M7 7C5.9 7 5 7.9 5 9S5.9 11 7 11 9 10.1 9 9 8.1 7 7 7Z"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      opacity="0.6"
+    />
+    <path d="M7 11C8.1 11 9 10.1 9 9S8.1 7 7 7 5 7.9 5 9 5.9 11 7 11Z" fill="currentColor" opacity="0.2" />
+  </svg>
+)
+
+export const TrashIcon = ({ className = "", size = 20 }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <path
+      d="M3 6H5H21M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      opacity="0.6"
+    />
+    <path
+      d="M10 11V17M14 11V17"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      opacity="0.6"
+    />
+    <path
+      d="M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z"
+      fill="currentColor"
+      opacity="0.2"
+    />
+  </svg>
+)

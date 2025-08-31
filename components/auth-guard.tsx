@@ -36,3 +36,13 @@ export function AuthGuard({ children, fallback }: AuthGuardProps) {
 
   return <>{children}</>
 }
+
+export const useAuth = () => {
+  const { data: session, isPending } = useSession()
+  return {
+    user: session?.user || null,
+    session,
+    isPending,
+    isLoading: isPending,
+  }
+}
