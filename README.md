@@ -44,4 +44,3 @@ px drizzle-kit push\ to set up the database schema
 - Supabase project configuration
 - Gemini API key for AI features
 - Better Auth configuration for authentication
-

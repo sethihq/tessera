@@ -8,12 +8,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Switch } from "@/components/ui/switch"
-import { useAuth } from "@/lib/auth-client"
-import type { AssetProject } from "@/lib/db"
+import { createClient } from "@/lib/supabase/client"
 import { ArrowLeft, ImageIcon, Loader2, Sparkles, Wand2 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { FileUpload } from "@/components/ui/file-upload"
 
 interface GenerationParameters {
@@ -24,11 +23,12 @@ interface GenerationParameters {
 }
 
 interface GenerateContentProps {
-  projects: AssetProject[]
+  projects: any[]
 }
 
 export function GenerateContent({ projects }: GenerateContentProps) {
-  const { user } = useAuth()
+  const supabase = createClient()
+  const [user, setUser] = useState<any>(null)
   const [selectedProject, setSelectedProject] = useState<string>("")
   const [newProjectName, setNewProjectName] = useState("")
   const [prompt, setPrompt] = useState("")
@@ -42,6 +42,16 @@ export function GenerateContent({ projects }: GenerateContentProps) {
   const [isGenerating, setIsGenerating] = useState(false)
   const [createNewProject, setCreateNewProject] = useState(false)
   const router = useRouter()
+
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      setUser(user)
+    }
+    getUser()
+  }, [supabase])
 
   const handleGenerate = async () => {
     if (!prompt.trim() || !user) return
@@ -80,10 +90,15 @@ export function GenerateContent({ projects }: GenerateContentProps) {
 
       if (!response.ok) {
         const error = await response.json()
-        throw new Error(error.message || "Generation failed")
+        throw new Error(error.error || "Generation failed")
       }
 
       const result = await response.json()
+
+      // Reset form
+      setPrompt("")
+      setStyleReference(null)
+      setNewProjectName("")
 
       // Redirect to the generated asset or project
       if (result.projectId) {
@@ -93,7 +108,8 @@ export function GenerateContent({ projects }: GenerateContentProps) {
       }
     } catch (error) {
       console.error("Generation error:", error)
-      // Handle error (show toast, etc.)
+      // TODO: Add proper error handling with toast notifications
+      alert(error instanceof Error ? error.message : "Generation failed")
     } finally {
       setIsGenerating(false)
     }

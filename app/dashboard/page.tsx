@@ -1,61 +1,42 @@
-import { getSession } from "@/lib/auth"
 import { redirect } from "next/navigation"
-import { DashboardContent } from "@/components/dashboard/dashboard-content"
-import { db, profiles, assetProjects, generatedAssets } from "@/lib/db"
-import { eq, desc } from "drizzle-orm"
+import { createClient } from "@/lib/supabase/server"
+import { UnifiedDashboard } from "@/components/dashboard/unified-dashboard"
 
 export default async function DashboardPage() {
-  const session = await getSession()
+  const supabase = await createClient()
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser()
 
-  if (!session?.user) {
+  if (error || !user) {
     redirect("/auth/sign-in")
   }
 
-  let profile = null
-  let recentProjects: any[] = []
-  let recentAssets: any[] = []
+  // Get user profile
+  const { data: profile } = await supabase.from("profiles").select("*").eq("user_id", user.id).single()
 
-  try {
-    profile = await db.query.profiles.findFirst({
-      where: eq(profiles.userId, session.user.id),
-    })
+  // Get recent projects
+  const { data: projects } = await supabase
+    .from("asset_projects")
+    .select("*")
+    .eq("user_id", user.id)
+    .order("updated_at", { ascending: false })
+    .limit(6)
 
-    recentProjects = await db
-      .select()
-      .from(assetProjects)
-      .where(eq(assetProjects.userId, session.user.id))
-      .orderBy(desc(assetProjects.createdAt))
-      .limit(6)
+  // Get recent assets with project info
+  const { data: assets } = await supabase
+    .from("generated_assets")
+    .select(`
+      *,
+      asset_projects (
+        id,
+        name
+      )
+    `)
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false })
+    .limit(8)
 
-    const recentAssetsWithProjects = await db
-      .select({
-        id: generatedAssets.id,
-        projectId: generatedAssets.projectId,
-        userId: generatedAssets.userId,
-        prompt: generatedAssets.prompt,
-        imageUrl: generatedAssets.imageUrl,
-        status: generatedAssets.status,
-        parameters: generatedAssets.parameters,
-        createdAt: generatedAssets.createdAt,
-        updatedAt: generatedAssets.updatedAt,
-        projectName: assetProjects.name,
-      })
-      .from(generatedAssets)
-      .leftJoin(assetProjects, eq(generatedAssets.projectId, assetProjects.id))
-      .where(eq(generatedAssets.userId, session.user.id))
-      .orderBy(desc(generatedAssets.createdAt))
-      .limit(8)
-
-    recentAssets = recentAssetsWithProjects.map((asset) => ({
-      ...asset,
-      asset_projects: asset.projectName ? { name: asset.projectName } : undefined,
-    }))
-  } catch (error) {
-    console.error("[v0] Database query error:", error)
-    // Continue with empty data rather than crashing
-  }
-
-  return (
-    <DashboardContent user={session.user} profile={profile} projects={recentProjects} recentAssets={recentAssets} />
-  )
+  return <UnifiedDashboard user={user} profile={profile} projects={projects || []} recentAssets={assets || []} />
 }
