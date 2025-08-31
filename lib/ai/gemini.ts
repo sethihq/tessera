@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai"
+import { createClient } from "@/lib/supabase/server"
 
 export interface GenerationRequest {
   prompt: string
@@ -59,12 +60,51 @@ export async function generateAsset(request: GenerationRequest): Promise<Generat
       } else if (part.inlineData) {
         console.log("[v0] Received image data from Gemini")
         const imageData = part.inlineData.data
-
-        // Convert base64 to data URL for immediate display
         const mimeType = part.inlineData.mimeType || "image/png"
-        imageUrl = `data:${mimeType};base64,${imageData}`
 
-        console.log("[v0] Generated image URL (base64):", imageUrl.substring(0, 100) + "...")
+        try {
+          const supabase = await createClient()
+
+          // Convert base64 to buffer
+          const imageBuffer = Buffer.from(imageData, "base64")
+
+          // Generate unique filename
+          const timestamp = Date.now()
+          const randomId = Math.random().toString(36).substring(2, 15)
+          const extension = mimeType.split("/")[1] || "png"
+          const fileName = `generated-asset-${timestamp}-${randomId}.${extension}`
+          const filePath = `assets/${fileName}`
+
+          console.log("[v0] Uploading image to Supabase storage...")
+
+          // Upload to Supabase storage
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from("generated-assets")
+            .upload(filePath, imageBuffer, {
+              contentType: mimeType,
+              cacheControl: "3600",
+              upsert: false,
+            })
+
+          if (uploadError) {
+            console.error("[v0] Storage upload error:", uploadError)
+            // Fallback to base64 if upload fails
+            imageUrl = `data:${mimeType};base64,${imageData}`
+          } else {
+            console.log("[v0] Image uploaded successfully:", uploadData.path)
+
+            // Get public URL
+            const { data: urlData } = supabase.storage.from("generated-assets").getPublicUrl(filePath)
+
+            imageUrl = urlData.publicUrl
+            console.log("[v0] Generated public URL:", imageUrl)
+          }
+        } catch (storageError) {
+          console.error("[v0] Storage operation failed:", storageError)
+          // Fallback to base64 if storage operations fail
+          imageUrl = `data:${mimeType};base64,${imageData}`
+        }
+
         break
       }
     }
