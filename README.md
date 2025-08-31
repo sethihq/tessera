@@ -28,3 +28,20 @@ Continue building your app on:
 2. Deploy your chats from the v0 interface
 3. Changes are automatically pushed to this repository
 4. Vercel deploys the latest version from this repository
+
+## Environment Setup
+
+1. Copy \.env.example\ to \.env\
+2. Fill in your actual environment variables
+3. Run \pnpm install\ to install dependencies
+4. Run \
+px drizzle-kit push\ to set up the database schema
+5. Run \pnpm dev\ to start the development server
+
+## Required Environment Variables
+
+- Database credentials (PostgreSQL via Supabase)
+- Supabase project configuration
+- Gemini API key for AI features
+- Better Auth configuration for authentication
+
