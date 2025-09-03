@@ -2,17 +2,17 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/luxe-ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/origin-ui/card"
-import { Input } from "@/components/origin-ui/input"
-import { Label } from "@/components/origin-ui/label"
-import { Textarea } from "@/components/origin-ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/origin-ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/origin-ui/tabs"
-import { Badge } from "@/components/luxe-ui/badge"
-import { Progress } from "@/components/origin-ui/progress"
-import { Separator } from "@/components/origin-ui/separator"
-import { Slider } from "@/components/luxe-ui/slider"
-import { Switch } from "@/components/luxe-ui/switch"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
+import { Separator } from "@/components/ui/separator"
+import { Slider } from "@/components/ui/slider"
+import { Switch } from "@/components/ui/switch"
 import { 
   GridIcon, 
   PlayIcon, 
@@ -680,9 +680,9 @@ export function SpriteSheetCreator({
                       value={(spriteSheet.generation_progress.completed_frames / spriteSheet.generation_progress.total_frames) * 100} 
                     />
                     <Badge variant={
-                      spriteSheet.status === "completed" ? "elevated" : 
-                      spriteSheet.status === "generating" ? "muted" : 
-                      "neutral"
+                      spriteSheet.status === "completed" ? "default" : 
+                      spriteSheet.status === "generating" ? "secondary" : 
+                      "outline"
                     }>
                       {spriteSheet.status}
                     </Badge>

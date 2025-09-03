@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { Card, CardContent } from "@/components/origin-ui/card"
-import { Badge } from "@/components/luxe-ui/badge"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/luxe-ui/button"
 import { 
   CheckCircleIcon, 
@@ -199,7 +199,7 @@ export function SpriteSheetGrid({
 
                   {/* Frame Position Label */}
                   <div className="absolute top-1 right-1">
-                    <Badge variant="neutral" className="text-xs px-1 py-0">
+                    <Badge variant="secondary" className="text-xs px-1 py-0">
                       {frame.position.row},{frame.position.col}
                     </Badge>
                   </div>
@@ -241,12 +241,12 @@ export function SpriteSheetGrid({
                     <div className="absolute bottom-1 left-1 right-1">
                       <div className="flex flex-wrap gap-1">
                         {frame.properties.emotion && frame.properties.emotion !== "neutral" && (
-                          <Badge variant="muted" className="text-xs px-1 py-0">
+                          <Badge variant="secondary" className="text-xs px-1 py-0">
                             {frame.properties.emotion}
                           </Badge>
                         )}
                         {frame.properties.action && frame.properties.action !== "idle" && (
-                          <Badge variant="muted" className="text-xs px-1 py-0">
+                          <Badge variant="secondary" className="text-xs px-1 py-0">
                             {frame.properties.action}
                           </Badge>
                         )}

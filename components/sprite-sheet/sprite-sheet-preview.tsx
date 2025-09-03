@@ -1,15 +1,15 @@
 "use client"
 
 import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/origin-ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/luxe-ui/button"
-import { Badge } from "@/components/luxe-ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/origin-ui/tabs"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/origin-ui/select"
-import { Input } from "@/components/origin-ui/input"
-import { Label } from "@/components/origin-ui/label"
-import { Switch } from "@/components/luxe-ui/switch"
-import { Slider } from "@/components/luxe-ui/slider"
+import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
+import { Slider } from "@/components/ui/slider"
 import { 
   EyeIcon, 
   DownloadIcon, 
@@ -124,7 +124,7 @@ export function SpriteSheetPreview({ spriteSheet, onExport }: SpriteSheetPreview
               <span className="text-sm font-medium">
                 Progress: {Math.round(completionPercentage)}%
               </span>
-              <Badge variant={spriteSheet.status === "completed" ? "elevated" : "muted"}>
+              <Badge variant={spriteSheet.status === "completed" ? "default" : "secondary"}>
                 {spriteSheet.status}
               </Badge>
             </div>

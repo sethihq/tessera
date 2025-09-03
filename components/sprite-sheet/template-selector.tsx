@@ -1,10 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/origin-ui/card"
-import { Badge } from "@/components/luxe-ui/badge"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/luxe-ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/origin-ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { 
   GridIcon, 
   PlayIcon, 
@@ -161,13 +161,13 @@ export function TemplateSelector({ templates, selectedTemplate, onTemplateSelect
                 </div>
                 <div className="flex items-center gap-2">
                   <Badge 
-                    variant="muted"
+                    variant="secondary"
                     className={`text-xs ${getCategoryColor(template.category)}`}
                   >
                     {template.category}
                   </Badge>
                   {template.is_public && (
-                    <Badge variant="neutral" className="text-xs">
+                    <Badge variant="outline" className="text-xs">
                       Public
                     </Badge>
                   )}

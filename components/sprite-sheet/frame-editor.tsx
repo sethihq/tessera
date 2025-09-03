@@ -1,16 +1,16 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/origin-ui/card"
-import { Label } from "@/components/origin-ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/origin-ui/select"
-import { Input } from "@/components/origin-ui/input"
-import { Textarea } from "@/components/origin-ui/textarea"
-import { Badge } from "@/components/luxe-ui/badge"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/luxe-ui/button"
-import { Separator } from "@/components/origin-ui/separator"
-import { Switch } from "@/components/luxe-ui/switch"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/origin-ui/tabs"
+import { Separator } from "@/components/ui/separator"
+import { Switch } from "@/components/ui/switch"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { 
   SettingsIcon, 
   PlusIcon, 
@@ -475,7 +475,7 @@ export function FrameEditor({ frame, spriteSheet, onFrameUpdate }: FrameEditorPr
                   {(localProperties.accessories || []).map((accessory, index) => (
                     <Badge
                       key={index}
-                      variant="muted"
+                      variant="secondary"
                       className="text-xs px-2 py-1 flex items-center gap-1"
                     >
                       {accessory}
@@ -578,7 +578,7 @@ export function FrameEditor({ frame, spriteSheet, onFrameUpdate }: FrameEditorPr
                   {(localProperties.special_effects || []).map((effect, index) => (
                     <Badge
                       key={index}
-                      variant="muted"
+                      variant="secondary"
                       className="text-xs px-2 py-1 flex items-center gap-1"
                     >
                       {effect}

@@ -155,7 +155,7 @@ export async function generateSpriteSheetFrame(
   worldStyle?: WorldStyle
 ): Promise<{ success: boolean; image_url?: string; error?: string; metadata?: any }> {
   try {
-    console.log(`[SpriteSheet] Generating frame ${frame.position.row},${frame.position.col}`)
+    console.log(`[SpriteSheet] Generating frame ${frame.position.row},${frame.position.col} with Gemini 2.0 Flash`)
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
     const model = genAI.getGenerativeModel({
@@ -179,7 +179,7 @@ export async function generateSpriteSheetFrame(
     
     for (const part of result.response.candidates[0].content.parts) {
       if (part.inlineData) {
-        console.log(`[SpriteSheet] Received image data for frame ${frame.position.row},${frame.position.col}`)
+        console.log(`[SpriteSheet] Received image data from Gemini for frame ${frame.position.row},${frame.position.col}`)
         
         const imageData = part.inlineData.data
         const mimeType = part.inlineData.mimeType || "image/png"

@@ -46,7 +46,7 @@ export async function generateAsset(request: GenerationRequest): Promise<Generat
     Generate the actual image asset.
     `
 
-    console.log("[v0] Generating image with Gemini 2.5 Flash...")
+    console.log("[v0] Generating image with Gemini 2.0 Flash Experimental...")
 
     const result = await model.generateContent(imageGenerationPrompt)
 
@@ -121,7 +121,7 @@ export async function generateAsset(request: GenerationRequest): Promise<Generat
         enhancedPrompt,
         parameters: request.parameters,
         generatedAt: new Date().toISOString(),
-        service: "gemini-2.5-flash-image",
+        service: "gemini-2.0-flash-exp",
         aiModel: "gemini-2.0-flash-exp",
       },
     }

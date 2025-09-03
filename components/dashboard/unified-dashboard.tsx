@@ -19,9 +19,11 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/luxe-ui/sidebar"
-import { Tabs, TabsContent } from "@/components/origin-ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { createClient } from "@/lib/supabase/client"
 import { SpriteSheetCreator } from "@/components/sprite-sheet/sprite-sheet-creator"
+import { ParallaxGenerator } from "@/components/parallax/parallax-generator"
+import { StyleReferenceUploader } from "@/components/style/style-reference-uploader"
 import {
   HomeIcon,
   ProjectsIcon,
@@ -38,6 +40,7 @@ import {
   GridIcon,
   RefreshCwIcon,
 } from "@/components/rounded-icons/icons"
+import { Folder, BookOpen } from "lucide-react"
 import Link from "next/link"
 import { useRouter, usePathname } from "next/navigation"
 import { useState } from "react"
@@ -53,7 +56,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
   const router = useRouter()
   const pathname = usePathname()
   const supabase = createClient()
-  const [activeTab, setActiveTab] = useState("overview")
+  const [activeTab, setActiveTab] = useState("create")
 
   const [assets, setAssets] = useState(recentAssets)
   const [isRefreshing, setIsRefreshing] = useState(false)
@@ -292,24 +295,117 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                 </h1>
               </div>
               <Button
-                onClick={() => setActiveTab("generate")}
-                className="bg-[#FF6600] hover:bg-[#E55A00] text-white shadow-sm h-9 px-4"
+                onClick={() => setActiveTab("create")}
+                className="bg-purple-600 hover:bg-purple-700 text-white shadow-sm h-9 px-4"
               >
                 <PlusIcon className="w-4 h-4 mr-2" />
-                <span className="text-sm font-medium">Generate Asset</span>
+                <span className="text-sm font-medium">Create Asset</span>
               </Button>
             </header>
 
             <main className="flex-1 p-6">
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                {/* Overview Tab */}
-                <TabsContent value="overview" className="space-y-8">
-                  {/* Welcome Section */}
-                  <div className="space-y-2">
-                    <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Welcome to Tessera!</h2>
-                    <p className="text-neutral-600 dark:text-neutral-400 text-balance">
-                      Create visually consistent 2D environment art assets for your indie games with AI.
-                    </p>
+                <TabsList className="grid w-full grid-cols-3 gap-1 p-1 bg-neutral-100 dark:bg-neutral-800 rounded-xl">
+                  <TabsTrigger value="create" className="flex-1 py-3 text-sm font-medium transition-all data-[state=active]:bg-white data-[state=active]:shadow-sm dark:data-[state=active]:bg-neutral-700">
+                    <PlusIcon className="w-4 h-4 mr-2" />
+                    Create
+                  </TabsTrigger>
+                  <TabsTrigger value="manage" className="flex-1 py-3 text-sm font-medium transition-all data-[state=active]:bg-white data-[state=active]:shadow-sm dark:data-[state=active]:bg-neutral-700">
+                    <Folder className="w-4 h-4 mr-2" />
+                    Manage
+                  </TabsTrigger>
+                  <TabsTrigger value="learn" className="flex-1 py-3 text-sm font-medium transition-all data-[state=active]:bg-white data-[state=active]:shadow-sm dark:data-[state=active]:bg-neutral-700">
+                    <BookOpen className="w-4 h-4 mr-2" />
+                    Learn
+                  </TabsTrigger>
+                </TabsList>
+                {/* Create Tab - Quick Start + Asset Creation */}
+                <TabsContent value="create" className="space-y-8">
+                  {/* Quick Start Section */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Create Assets</h2>
+                      <div className="text-sm text-neutral-500 dark:text-neutral-400">
+                        Choose a quick start option or create from scratch
+                      </div>
+                    </div>
+                    
+                    {/* Quick Create Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <Card className="cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 border-2 border-dashed border-neutral-200 dark:border-neutral-800 hover:border-purple-400 dark:hover:border-purple-500">
+                        <CardContent className="p-8 text-center space-y-4">
+                          <div className="w-16 h-16 mx-auto bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900 dark:to-purple-800 rounded-2xl flex items-center justify-center">
+                            <GridIcon className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+                          </div>
+                          <div>
+                            <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-2">Sprite Sheets</h3>
+                            <p className="text-sm text-neutral-600 dark:text-neutral-400">Character animations, UI elements, game objects</p>
+                          </div>
+                          <Button 
+                            onClick={() => setActiveTab("sprite-sheet")}
+                            className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                          >
+                            Start Creating
+                          </Button>
+                        </CardContent>
+                      </Card>
+
+                      <Card className="cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 border-2 border-dashed border-neutral-200 dark:border-neutral-800 hover:border-blue-400 dark:hover:border-blue-500">
+                        <CardContent className="p-8 text-center space-y-4">
+                          <div className="w-16 h-16 mx-auto bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800 rounded-2xl flex items-center justify-center">
+                            <GridIcon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                          </div>
+                          <div>
+                            <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-2">Parallax Backgrounds</h3>
+                            <p className="text-sm text-neutral-600 dark:text-neutral-400">Multi-layer scrolling backgrounds</p>
+                          </div>
+                          <Button 
+                            onClick={() => setActiveTab("parallax")}
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                          >
+                            Start Creating
+                          </Button>
+                        </CardContent>
+                      </Card>
+
+                      <Card className="cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 border-2 border-dashed border-neutral-200 dark:border-neutral-800 hover:border-green-400 dark:hover:border-green-500">
+                        <CardContent className="p-8 text-center space-y-4">
+                          <div className="w-16 h-16 mx-auto bg-gradient-to-br from-green-100 to-green-200 dark:from-green-900 dark:to-green-800 rounded-2xl flex items-center justify-center">
+                            <GridIcon className="w-8 h-8 text-green-600 dark:text-green-400" />
+                          </div>
+                          <div>
+                            <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-2">Style References</h3>
+                            <p className="text-sm text-neutral-600 dark:text-neutral-400">Upload and analyze art styles</p>
+                          </div>
+                          <Button 
+                            onClick={() => setActiveTab("styles")}
+                            className="w-full bg-green-600 hover:bg-green-700 text-white"
+                          >
+                            Start Creating
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* Manage Tab - Projects + Assets */}
+                <TabsContent value="manage" className="space-y-8">
+                  {/* Dashboard Overview */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Projects & Assets</h2>
+                      <p className="text-neutral-600 dark:text-neutral-400">
+                        Manage your game asset projects and generated content
+                      </p>
+                    </div>
+                    <Button 
+                      onClick={() => setActiveTab("create")}
+                      className="bg-purple-600 hover:bg-purple-700 text-white"
+                    >
+                      <PlusIcon className="w-4 h-4 mr-2" />
+                      New Asset
+                    </Button>
                   </div>
 
                   {/* Stats Cards */}
@@ -438,7 +534,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                       <Input
                         placeholder="SearchIcon projects..."
                         value={searchQuery}
-                        onChange={(e) => setSearchIconQuery(e.target.value)}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                         className="pl-10"
                       />
                     </div>
@@ -498,7 +594,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                       <Input
                         placeholder="SearchIcon assets..."
                         value={searchQuery}
-                        onChange={(e) => setSearchIconQuery(e.target.value)}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                         className="pl-10"
                       />
                     </div>
@@ -686,7 +782,7 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                 </TabsContent>
 
                 {/* Sprite Sheets Tab */}
-                <TabsContent value="sprite-sheets" className="space-y-6">
+                <TabsContent value="sprite-sheet" className="space-y-6">
                   <SpriteSheetCreator 
                     projects={projects}
                     worldStyles={[]} // TODO: Fetch world styles
@@ -696,6 +792,154 @@ export function UnifiedDashboard({ user, profile, projects, recentAssets }: Unif
                       // TODO: Handle sprite sheet creation
                     }}
                   />
+                </TabsContent>
+
+                {/* Parallax Backgrounds Tab */}
+                <TabsContent value="parallax" className="space-y-6">
+                  <ParallaxGenerator 
+                    projects={projects}
+                    onAssetGenerated={(asset) => {
+                      console.log("Parallax asset created:", asset)
+                      // Refresh the assets list
+                      setAssets([...assets, asset])
+                    }}
+                  />
+                </TabsContent>
+
+                {/* Style References Tab */}
+                <TabsContent value="styles" className="space-y-6">
+                  <StyleReferenceUploader 
+                    onStyleReferenceCreated={(styleRef) => {
+                      console.log("Style reference created:", styleRef)
+                    }}
+                  />
+                </TabsContent>
+
+                {/* Learn Tab - Tutorials + Resources */}
+                <TabsContent value="learn" className="space-y-8">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Learn & Resources</h2>
+                      <p className="text-neutral-600 dark:text-neutral-400">
+                        Master game asset creation with tutorials and community resources
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Quick Start Guide */}
+                  <Card className="border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-blue-800 dark:text-blue-200">
+                        <BookOpen className="w-5 h-5" />
+                        Quick Start Guide
+                      </CardTitle>
+                      <CardDescription className="text-blue-600 dark:text-blue-300">
+                        New to Tessera? Get started in minutes with our step-by-step guide
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="flex items-start gap-3 p-4 bg-white dark:bg-neutral-900 rounded-lg">
+                          <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center text-sm font-bold text-blue-600 dark:text-blue-300">
+                            1
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 mb-1">Create Your First Asset</h4>
+                            <p className="text-xs text-neutral-600 dark:text-neutral-400">Start with our sprite sheet generator</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3 p-4 bg-white dark:bg-neutral-900 rounded-lg">
+                          <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center text-sm font-bold text-blue-600 dark:text-blue-300">
+                            2
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 mb-1">Upload Style References</h4>
+                            <p className="text-xs text-neutral-600 dark:text-neutral-400">Maintain consistent art direction</p>
+                          </div>
+                        </div>
+                        <div className="flex items-start gap-3 p-4 bg-white dark:bg-neutral-900 rounded-lg">
+                          <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center text-sm font-bold text-blue-600 dark:text-blue-300">
+                            3
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 mb-1">Export & Integrate</h4>
+                            <p className="text-xs text-neutral-600 dark:text-neutral-400">Download for Unity, Godot, or custom engines</p>
+                          </div>
+                        </div>
+                      </div>
+                      <Button className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white">
+                        Start Tutorial
+                      </Button>
+                    </CardContent>
+                  </Card>
+
+                  {/* Learning Resources */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-lg">Video Tutorials</CardTitle>
+                        <CardDescription>
+                          Watch step-by-step tutorials for each asset type
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <div className="flex items-center gap-3 p-3 bg-neutral-50 dark:bg-neutral-900 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer transition-colors">
+                          <div className="w-12 h-8 bg-gradient-to-r from-purple-500 to-purple-600 rounded flex items-center justify-center">
+                            <GridIcon className="w-4 h-4 text-white" />
+                          </div>
+                          <div>
+                            <h4 className="text-sm font-medium text-neutral-900 dark:text-neutral-100">Creating Sprite Sheets</h4>
+                            <p className="text-xs text-neutral-500 dark:text-neutral-400">15 min • Beginner</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3 p-3 bg-neutral-50 dark:bg-neutral-900 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer transition-colors">
+                          <div className="w-12 h-8 bg-gradient-to-r from-blue-500 to-blue-600 rounded flex items-center justify-center">
+                            <GridIcon className="w-4 h-4 text-white" />
+                          </div>
+                          <div>
+                            <h4 className="text-sm font-medium text-neutral-900 dark:text-neutral-100">Parallax Backgrounds</h4>
+                            <p className="text-xs text-neutral-500 dark:text-neutral-400">20 min • Intermediate</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3 p-3 bg-neutral-50 dark:bg-neutral-900 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer transition-colors">
+                          <div className="w-12 h-8 bg-gradient-to-r from-green-500 to-green-600 rounded flex items-center justify-center">
+                            <GridIcon className="w-4 h-4 text-white" />
+                          </div>
+                          <div>
+                            <h4 className="text-sm font-medium text-neutral-900 dark:text-neutral-100">Style Consistency</h4>
+                            <p className="text-xs text-neutral-500 dark:text-neutral-400">12 min • Advanced</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-lg">Community & Support</CardTitle>
+                        <CardDescription>
+                          Connect with other indie developers
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <Button variant="outline" className="w-full justify-start">
+                          <BookOpen className="w-4 h-4 mr-2" />
+                          Documentation
+                        </Button>
+                        <Button variant="outline" className="w-full justify-start">
+                          <GridIcon className="w-4 h-4 mr-2" />
+                          Discord Community
+                        </Button>
+                        <Button variant="outline" className="w-full justify-start">
+                          <GridIcon className="w-4 h-4 mr-2" />
+                          GitHub Repository
+                        </Button>
+                        <Button variant="outline" className="w-full justify-start">
+                          <GridIcon className="w-4 h-4 mr-2" />
+                          Report Issues
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </div>
                 </TabsContent>
               </Tabs>
             </main>
