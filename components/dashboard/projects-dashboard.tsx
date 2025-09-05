@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
 import { Search, MoreHorizontal, Users, ChevronDown, Plus, Folder, FileText } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -213,6 +215,7 @@ export function ProjectsDashboard({ projects, recentFiles, user }: ProjectsDashb
 /* Enhanced ProjectCard with proper navigation and better visual design */
 function ProjectCard({ project }: { project: Project }) {
   const [isCreatingFile, setIsCreatingFile] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const handleProjectClick = async () => {
     setIsCreatingFile(true)
@@ -239,15 +242,40 @@ function ProjectCard({ project }: { project: Project }) {
     }
   }
 
+  const handleDeleteProject = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+
+    if (!confirm(`Are you sure you want to delete "${project.name}"? This action cannot be undone.`)) {
+      return
+    }
+
+    setIsDeleting(true)
+    try {
+      const response = await fetch(`/api/projects?id=${project.id}`, {
+        method: "DELETE",
+      })
+
+      if (response.ok) {
+        window.location.reload()
+      } else {
+        console.error("Failed to delete project")
+      }
+    } catch (error) {
+      console.error("Failed to delete project:", error)
+    } finally {
+      setIsDeleting(false)
+    }
+  }
+
   return (
     <Card
-      className="group hover:ring-2 hover:ring-[#FF6600]/50 transition-all duration-300 cursor-pointer bg-zinc-800/30 backdrop-blur-sm border-zinc-700/50 overflow-hidden hover:shadow-xl hover:shadow-[#FF6600]/10"
+      className="group hover:ring-2 hover:ring-[#FF6600]/50 transition-all duration-300 cursor-pointer bg-zinc-800/30 backdrop-blur-sm border-zinc-700/50 overflow-hidden hover:shadow-xl hover:shadow-[#FF6600]/10 relative"
       onClick={handleProjectClick}
     >
       <div className="aspect-video bg-gradient-to-br from-zinc-700/50 to-zinc-800/50 flex items-center justify-center relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-[#FF6600]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         <div className="text-4xl opacity-40 group-hover:opacity-60 transition-opacity duration-300">🎮</div>
-        {isCreatingFile && (
+        {(isCreatingFile || isDeleting) && (
           <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
             <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#FF6600] border-t-transparent" />
           </div>
@@ -271,16 +299,30 @@ function ProjectCard({ project }: { project: Project }) {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-zinc-400 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                className="text-zinc-400 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-zinc-700/50"
               >
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-zinc-800/90 backdrop-blur-xl border-zinc-700/50">
-              <DropdownMenuItem className="text-white hover:bg-zinc-700/50">Open</DropdownMenuItem>
-              <DropdownMenuItem className="text-white hover:bg-zinc-700/50">Rename</DropdownMenuItem>
-              <DropdownMenuItem className="text-white hover:bg-zinc-700/50">Duplicate</DropdownMenuItem>
-              <DropdownMenuItem className="text-red-400 hover:bg-zinc-700/50">Delete</DropdownMenuItem>
+            <DropdownMenuContent align="end" className="bg-zinc-800/90 backdrop-blur-xl border-zinc-700/50 shadow-xl">
+              <DropdownMenuItem
+                className="text-white hover:bg-zinc-700/50 cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleProjectClick()
+                }}
+              >
+                Open
+              </DropdownMenuItem>
+              <DropdownMenuItem className="text-white hover:bg-zinc-700/50 cursor-pointer">Rename</DropdownMenuItem>
+              <DropdownMenuItem className="text-white hover:bg-zinc-700/50 cursor-pointer">Duplicate</DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-red-400 hover:bg-red-500/10 hover:text-red-300 cursor-pointer"
+                onClick={handleDeleteProject}
+                disabled={isDeleting}
+              >
+                {isDeleting ? "Deleting..." : "Delete"}
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
