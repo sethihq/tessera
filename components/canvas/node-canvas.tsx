@@ -176,6 +176,14 @@ function NodeCanvasInner({ className = "" }: NodeCanvasProps) {
     [reactFlowInstance, setNodes],
   )
 
+  const handleNodeDelete = useCallback(
+    (nodeId: string) => {
+      setNodes((nodes) => nodes.filter((node) => node.id !== nodeId))
+      setEdges((edges) => edges.filter((edge) => edge.source !== nodeId && edge.target !== nodeId))
+    },
+    [setNodes, setEdges],
+  )
+
   // Handle node execution
   const handleNodeRun = useCallback(
     (nodeId: string) => {
@@ -239,7 +247,13 @@ function NodeCanvasInner({ className = "" }: NodeCanvasProps) {
   return (
     <div className={`h-full w-full ${className}`}>
       <ReactFlow
-        nodes={nodes}
+        nodes={nodes.map((node) => ({
+          ...node,
+          data: {
+            ...node.data,
+            onDelete: handleNodeDelete,
+          },
+        }))}
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
@@ -250,54 +264,54 @@ function NodeCanvasInner({ className = "" }: NodeCanvasProps) {
         nodeTypes={nodeTypes}
         fitView
         attributionPosition="bottom-left"
-        className="bg-neutral-50 dark:bg-neutral-900"
+        className="bg-neutral-50 dark:bg-neutral-950"
         connectionLineType="smoothstep"
         defaultEdgeOptions={{
           type: "smoothstep",
           animated: false,
           style: {
-            stroke: "#FF6600",
-            strokeWidth: 2,
+            stroke: "#737373",
+            strokeWidth: 1.5,
           },
         }}
+        selectNodesOnDrag={false}
+        panOnDrag={[1, 2]}
+        selectionOnDrag
+        multiSelectionKeyCode="Shift"
       >
-        {/* Dotted background */}
-        <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="#9ca3af" className="opacity-30" />
-
-        {/* Controls */}
-        <Controls
-          position="bottom-right"
-          className="bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg"
+        <Background
+          variant={BackgroundVariant.Dots}
+          gap={20}
+          size={0.6}
+          color="#d4d4d4"
+          className="opacity-30 dark:opacity-20"
         />
 
-        {/* Minimap */}
+        <Controls
+          position="bottom-right"
+          className="bg-white/95 dark:bg-neutral-900/95 border border-neutral-200 dark:border-neutral-800 rounded shadow-sm"
+          showZoom={true}
+          showFitView={true}
+          showInteractive={false}
+        />
+
         <MiniMap
           position="top-right"
-          className="bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg"
+          className="bg-white/95 dark:bg-neutral-900/95 border border-neutral-200 dark:border-neutral-800 rounded shadow-sm"
+          style={{ width: 140, height: 90 }}
           nodeColor={(node) => {
-            switch (node.data?.type) {
-              case "sprite-sheet":
-                return "#a855f7"
-              case "parallax":
-                return "#3b82f6"
-              case "style-ref":
+            switch (node.data?.status) {
+              case "completed":
                 return "#10b981"
-              case "generator":
-                return "#f59e0b"
-              case "export":
-                return "#6b7280"
-              case "prompt":
-                return "#0ea5e9"
-              case "tileset":
-                return "#f97316"
-              case "props":
-                return "#eab308"
-              case "sprite-to-gif":
-                return "#ec4899"
+              case "generating":
+                return "#FF6600"
+              case "error":
+                return "#ef4444"
               default:
                 return "#6b7280"
             }
           }}
+          maskColor="rgb(245, 245, 245, 0.7)"
         />
       </ReactFlow>
     </div>
